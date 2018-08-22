@@ -32,6 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // 查询用户信息,包含角色列表
         UserVO userVo = userService.findUserByUsername(username);
         if (userVo == null) {
             throw new UsernameNotFoundException("用户名/密码错误");

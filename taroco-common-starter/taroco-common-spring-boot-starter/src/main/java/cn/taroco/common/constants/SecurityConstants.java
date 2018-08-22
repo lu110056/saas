@@ -19,22 +19,27 @@ public interface SecurityConstants {
      * 角色信息头
      */
     String ROLE_HEADER = "x-role-header";
+
     /**
      * 项目的license
      */
     String LICENSE = "made by taroco";
+
     /**
      * 基础角色
      */
     String BASE_ROLE = "ROLE_USER";
+
     /**
      * 授权码模式
      */
     String AUTHORIZATION_CODE = "authorization_code";
+
     /**
      * 密码模式
      */
     String PASSWORD = "password";
+
     /**
      * 刷新token
      */

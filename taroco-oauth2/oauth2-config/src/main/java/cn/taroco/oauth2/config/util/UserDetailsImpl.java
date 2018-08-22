@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 扩展UserDetails信息 满足业务需求
+ *
  * @author liuht
  * @date 2017/10/29
  */
@@ -23,6 +25,7 @@ public class UserDetailsImpl implements UserDetails {
     private String username;
     private String password;
     private String status;
+    private String label;
     private List<SysRole> roleList;
 
     public UserDetailsImpl(UserVO userVo) {
@@ -30,6 +33,7 @@ public class UserDetailsImpl implements UserDetails {
         this.username = userVo.getUsername();
         this.password = userVo.getPassword();
         this.status = userVo.getDelFlag();
+        this.label = userVo.getLabel();
         roleList = userVo.getRoleList();
     }
 
@@ -39,6 +43,7 @@ public class UserDetailsImpl implements UserDetails {
         for (SysRole role : roleList) {
             authorityList.add(new SimpleGrantedAuthority(role.getRoleCode()));
         }
+        // 为每一个用户添加一个基本角色
         authorityList.add(new SimpleGrantedAuthority(SecurityConstants.BASE_ROLE));
         return authorityList;
     }
@@ -99,5 +104,13 @@ public class UserDetailsImpl implements UserDetails {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

@@ -1,11 +1,10 @@
 package cn.taroco.gateway.filter.pre;
 
+import cn.taroco.common.constants.CommonConstant;
 import cn.taroco.common.ribbon.XlabelHeaderInterceptor;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static cn.taroco.gateway.filter.MyFilterConstants.PRE_REQUEST_XLABEL_ORDER;
 import static cn.taroco.gateway.filter.MyFilterConstants.PRE_TYPE;
@@ -38,9 +37,8 @@ public class XlabelRequestPreFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        HttpServletRequest request = ctx.getRequest();
-        XlabelHeaderInterceptor.initHystrixRequestContext(request.getHeader(XlabelHeaderInterceptor.HEADER_LABEL));
+        RequestContext requestContext = RequestContext.getCurrentContext();
+        XlabelHeaderInterceptor.initHystrixRequestContext(requestContext.getZuulRequestHeaders().get(CommonConstant.HEADER_LABEL));
         return null;
     }
 }

@@ -9,6 +9,7 @@
         <result column="phone" property="phone" />
         <result column="avatar" property="avatar" />
         <result column="salt" property="salt"/>
+        <result column="label" property="label" />
         <result column="dept_id" property="deptId"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
@@ -23,6 +24,7 @@
         <result column="salt" property="salt"/>
         <result column="phone" property="phone" />
         <result column="avatar" property="avatar" />
+        <result column="label" property="label" />
         <result column="ucreate_time" property="createTime"/>
         <result column="uupdate_time" property="updateTime"/>
         <result column="udel_flag" property="delFlag"/>
@@ -46,6 +48,7 @@
             `user`.salt,
             `user`.phone,
             `user`.avatar,
+            `user`.label,
             `user`.dept_id,
             `user`.create_time AS ucreate_time,
             `user`.update_time AS uupdate_time,
@@ -86,6 +89,7 @@
             `user`.salt,
             `user`.phone,
             `user`.avatar,
+            `user`.label,
             `user`.create_time AS ucreate_time,
             `user`.update_time AS uupdate_time,
             `user`.del_flag AS udel_flag,
@@ -114,6 +118,7 @@
             `user`.salt,
             `user`.phone,
             `user`.avatar,
+            `user`.label,
             `user`.create_time AS ucreate_time,
             `user`.update_time AS uupdate_time,
             `user`.del_flag AS udel_flag,

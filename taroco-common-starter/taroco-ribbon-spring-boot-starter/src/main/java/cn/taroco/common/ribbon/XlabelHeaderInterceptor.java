@@ -1,5 +1,6 @@
 package cn.taroco.common.ribbon;
 
+import cn.taroco.common.constants.CommonConstant;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestVariableDefault;
 import org.slf4j.Logger;
@@ -23,9 +24,6 @@ import java.util.List;
 public class XlabelHeaderInterceptor extends HandlerInterceptorAdapter {
     private static final Logger logger = LoggerFactory.getLogger(XlabelHeaderInterceptor.class);
 
-    public static final String HEADER_LABEL = "x-label";
-    public static final String HEADER_LABEL_SPLIT = ",";
-
     /**
      * 每个实例(服务)的路由信息存在注册中心的metadata中
      * HystrixRequestVariableDefault 用于在线程中传递 x-label标签
@@ -41,7 +39,7 @@ public class XlabelHeaderInterceptor extends HandlerInterceptorAdapter {
         }
 
         if (!StringUtils.isEmpty(labels)) {
-            XlabelHeaderInterceptor.LABEL.set(Arrays.asList(labels.split(XlabelHeaderInterceptor.HEADER_LABEL_SPLIT)));
+            XlabelHeaderInterceptor.LABEL.set(Arrays.asList(labels.split(CommonConstant.HEADER_LABEL_SPLIT)));
         } else {
             XlabelHeaderInterceptor.LABEL.set(Collections.emptyList());
         }
@@ -58,7 +56,7 @@ public class XlabelHeaderInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        XlabelHeaderInterceptor.initHystrixRequestContext(request.getHeader(XlabelHeaderInterceptor.HEADER_LABEL));
+        XlabelHeaderInterceptor.initHystrixRequestContext(request.getHeader(CommonConstant.HEADER_LABEL));
         return true;
     }
 
