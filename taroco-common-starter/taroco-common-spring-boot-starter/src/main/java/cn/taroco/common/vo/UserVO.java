@@ -54,6 +54,11 @@ public class UserVO implements Serializable {
     private String avatar;
 
     /**
+     * 标签
+     */
+    private String label;
+
+    /**
      * 部门ID
      */
     private Integer deptId;

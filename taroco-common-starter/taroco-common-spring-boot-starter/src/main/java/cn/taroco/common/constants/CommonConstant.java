@@ -10,12 +10,32 @@ public interface CommonConstant {
     /**
      * token请求头名称
      */
-    String REQ_HEADER = "Authorization";
+    String TOKEN_HEADER = "Authorization";
 
     /**
-     * token分割符
+     * 标签 header key
      */
-    String TOKEN_SPLIT = "Bearer ";
+    String HEADER_LABEL = "x-label";
+
+    /**
+     * 标签 header 分隔符
+     */
+    String HEADER_LABEL_SPLIT = ",";
+
+    /**
+     * 标签或 名称
+     */
+    String LABEL_OR = "labelOr";
+
+    /**
+     * 标签且 名称
+     */
+    String LABEL_AND = "labelAnd";
+
+    /**
+     * 权重key
+     */
+    String WEIGHT_KEY = "weight";
 
     /**
      * 删除

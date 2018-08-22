@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2018-08-20 15:48:48
+Date: 2018-08-22 09:21:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -336,6 +336,7 @@ CREATE TABLE `sys_user` (
   `salt` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '随机盐',
   `phone` varchar(20) COLLATE utf8mb4_bin NOT NULL COMMENT '简介',
   `avatar` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '头像',
+  `label` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `dept_id` int(11) DEFAULT NULL COMMENT '部门ID',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
@@ -348,7 +349,7 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$vg5QNHhCknAqevx9vM2s5esllJEzF/pa8VZXtFYHhhOhUcCw/GWyS', null, '17034642111', null, '10', '2018-04-20 07:15:18', '2018-08-20 11:49:44', '0');
+INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$vg5QNHhCknAqevx9vM2s5esllJEzF/pa8VZXtFYHhhOhUcCw/GWyS', null, '17034642111', null, null, '10', '2018-04-20 07:15:18', '2018-08-20 11:49:44', '0');
 
 -- ----------------------------
 -- Table structure for sys_user_role
@@ -388,7 +389,7 @@ CREATE TABLE `sys_zuul_route` (
 -- Records of sys_zuul_route
 -- ----------------------------
 INSERT INTO `sys_zuul_route` VALUES ('3', '/taroco-admin/**', 'taroco-admin', '', '1', '1', '1', '', '2018-05-17 14:09:06', '2018-08-02 08:31:06', '0');
-INSERT INTO `sys_zuul_route` VALUES ('4', '/admin/**', 'taroco-rbac-service', '', '1', '1', '1', '', '2018-05-21 11:40:38', '2018-08-02 08:31:32', '0');
+INSERT INTO `sys_zuul_route` VALUES ('4', '/admin/**', 'taroco-rbac-service', '', '1', '1', '1', '', '2018-05-21 11:40:38', '2018-08-20 17:36:08', '0');
 INSERT INTO `sys_zuul_route` VALUES ('5', '/auth/**', 'taroco-authentication-server', '', '1', '1', '1', '', '2018-05-21 11:41:08', '2018-08-02 08:31:34', '0');
 INSERT INTO `sys_zuul_route` VALUES ('6', '/taroco-registry/**', 'taroco-registry', '', '1', '1', '1', '', '2018-05-21 11:41:08', '2018-08-02 08:32:09', '0');
 INSERT INTO `sys_zuul_route` VALUES ('7', '/taroco-monitor/**', 'taroco-monitor', '', '1', '1', '1', '', '2018-05-21 11:41:08', '2018-08-02 08:32:09', '0');

@@ -2,6 +2,7 @@ package cn.taroco.rbac.admin.model.dto;
 
 import cn.taroco.rbac.admin.model.entity.SysUser;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @date 2017/11/5
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class UserDTO extends SysUser {
     /**
      * 角色ID

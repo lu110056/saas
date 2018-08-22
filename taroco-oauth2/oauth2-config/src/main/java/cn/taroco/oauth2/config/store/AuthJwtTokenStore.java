@@ -1,5 +1,6 @@
 package cn.taroco.oauth2.config.store;
 
+import cn.taroco.common.constants.CommonConstant;
 import cn.taroco.common.constants.SecurityConstants;
 import cn.taroco.oauth2.config.util.UserDetailsImpl;
 import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
@@ -50,6 +51,8 @@ public class AuthJwtTokenStore {
     /**
      * jwt 生成token 定制化处理
      *
+     * 添加一些额外的用户信息到token里面
+     *
      * @return TokenEnhancer
      */
     @Bean
@@ -60,6 +63,7 @@ public class AuthJwtTokenStore {
             UserDetailsImpl user = (UserDetailsImpl) authentication.getUserAuthentication().getPrincipal();
             if (user != null) {
                 additionalInfo.put("userId", user.getUserId());
+                additionalInfo.put(CommonConstant.HEADER_LABEL, user.getLabel());
             }
             ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
             return accessToken;

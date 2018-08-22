@@ -1,5 +1,6 @@
 package cn.taroco.common.ribbon;
 
+import cn.taroco.common.constants.CommonConstant;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +31,9 @@ public class XlabelHttpRequestInterceptor implements ClientHttpRequestIntercepto
         }
 
         HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
-        String header = StringUtils.collectionToDelimitedString(XlabelHeaderInterceptor.LABEL.get(), XlabelHeaderInterceptor.HEADER_LABEL_SPLIT);
+        String header = StringUtils.collectionToDelimitedString(XlabelHeaderInterceptor.LABEL.get(), CommonConstant.HEADER_LABEL_SPLIT);
         logger.info("label: " + header);
-        requestWrapper.getHeaders().add(XlabelHeaderInterceptor.HEADER_LABEL, header);
+        requestWrapper.getHeaders().add(CommonConstant.HEADER_LABEL, header);
 
         return execution.execute(requestWrapper, body);
     }
