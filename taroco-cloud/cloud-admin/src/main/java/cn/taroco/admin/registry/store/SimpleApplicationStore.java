@@ -3,121 +3,94 @@ package cn.taroco.admin.registry.store;
 import cn.taroco.admin.event.ClientApplicationDeregisteredEvent;
 import cn.taroco.admin.event.ClientApplicationRegisteredEvent;
 import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 import cn.taroco.admin.model.StatusInfo;
+import lombok.extern.log4j.Log4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 /**
  * 服务缓存hashMap实现
  *
  * @author liuht
  */
+@Log4j
 public class SimpleApplicationStore implements ApplicationStore, ApplicationEventPublisherAware {
 
     private ApplicationEventPublisher publisher;
 
-    private final ConcurrentMap<String, Application> map = new ConcurrentHashMap<>();
-
-    private final ConcurrentMap<String, Application> downMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Application> apps = new ConcurrentHashMap<>();
 
     @Override
-    public Map getSumMap() {
-        Map<String, Object> sum = new HashMap<>(3);
-        sum.put("total", map.size() + downMap.size());
-        sum.put("up", map.size());
-        sum.put("down", downMap.size());
-        return sum;
-    }
-
-    @Override
-    public Application save(Application app) {
-        if (!map.containsKey(app.getInstance().getInstanceId())
-                && !downMap.containsKey(app.getInstance().getInstanceId())) {
-            publisher.publishEvent(new ClientApplicationRegisteredEvent(app));
-        }
-        if (downMap.containsKey(app.getInstance().getInstanceId())) {
-            if (StatusInfo.valueOf(app.getInstance().getStatus()).isUp()) {
-                removeToUP(app);
-                return app;
+    public void save(String serviceId, Instance instance) {
+        if (apps.containsKey(serviceId)) {
+            final Application app = apps.get(serviceId);
+            final Instance instance1 = find(instance.getInstanceId());
+            if (instance1 == null) {
+                // 新实例注册
+                app.getInstances().add(instance);
+                publisher.publishEvent(new ClientApplicationRegisteredEvent(serviceId, instance));
             } else {
-                return downMap.put(app.getInstance().getInstanceId(), app);
+                // 刷新实例, 主要是为了刷新metadata
+                app.getInstances().remove(instance1);
+                app.getInstances().add(instance);
+                apps.put(serviceId, app);
             }
+        } else {
+            // 新服务注册
+            final Application app = new Application();
+            app.setServiceId(serviceId);
+            app.getInstances().add(instance);
+            apps.put(serviceId, app);
+            publisher.publishEvent(new ClientApplicationRegisteredEvent(serviceId, instance));
         }
-        return map.put(app.getInstance().getInstanceId(), app);
     }
 
     @Override
     public Collection<Application> findAll() {
-        Collection<Application> result = new ArrayList<>(12);
-        if (!CollectionUtils.isEmpty(map.values())) {
-            result.addAll(map.values());
-        }
-        if (!CollectionUtils.isEmpty(downMap.values())) {
-            result.addAll(downMap.values());
-        }
-        return result;
+        return apps.values();
     }
 
     @Override
-    public Application find(String instanceId) {
-        return map.get(instanceId) == null ? downMap.get(instanceId) : map.get(instanceId);
-    }
-
-    @Override
-    public Collection<Application> findByNameAndStatus(String serviceId, String status) {
-        List<Application> result = (List<Application>) findAll();
-        if (!StringUtils.isEmpty(serviceId)) {
-            result = result
-                    .stream()
-                    .filter(application -> serviceId.equals(application.getName()))
-                    .collect(Collectors.toList());
+    public Instance find(String instanceId) {
+        final Collection<Application> all = apps.values();
+        for (Application app : all) {
+            final Collection<Instance> instances = app.getInstances();
+            for (Instance instance : instances) {
+                if (instanceId.equals(instance.getInstanceId())) {
+                    return instance;
+                }
+            }
         }
-        if (!StringUtils.isEmpty(status)) {
-            result = result
-                    .stream()
-                    .filter(application -> status.equalsIgnoreCase(application.getInstance().getStatus()))
-                    .collect(Collectors.toList());
-        }
-
-        return result;
-    }
-
-    @Override
-    public Application delete(String instanceId) {
-        if (map.containsKey(instanceId)) {
-            publisher.publishEvent(new ClientApplicationDeregisteredEvent(map.get(instanceId)));
-            return map.remove(instanceId);
-        }
-
-        if (downMap.containsKey(instanceId)) {
-            publisher.publishEvent(new ClientApplicationDeregisteredEvent(downMap.get(instanceId)));
-            return downMap.remove(instanceId);
-        }
-
         return null;
     }
 
     @Override
-    public void removeToDownMap(Application app) {
-        String instanceId = app.getInstance().getInstanceId();
-        if (map.containsKey(instanceId)) {
-            map.remove(instanceId);
-            downMap.put(instanceId, app);
-        }
+    public void delete(String instanceId) {
+        apps.values().forEach(app -> app.getInstances().forEach(instance -> {
+            if (instance.getInstanceId().equals(instanceId)) {
+                app.getInstances().remove(instance);
+                publisher.publishEvent(new ClientApplicationDeregisteredEvent(app.getServiceId(), instance));
+            }
+        }));
     }
 
     @Override
-    public void removeToUP(Application app) {
-        if (downMap.containsKey(app.getInstance().getInstanceId())) {
-            downMap.remove(app.getInstance().getInstanceId());
-            map.put(app.getInstance().getInstanceId(), app);
+    public void statusChange(String serviceId, String instanceId, StatusInfo from, StatusInfo to) {
+        final Instance instance1 = apps.get(serviceId).getInstances()
+                .stream()
+                .filter(instance -> instance.getInstanceId().equals(instanceId))
+                .findFirst().orElse(null);
+        if (instance1 != null) {
+            // 检查状态是否匹配
+            if (!instance1.getStatus().equals(from.getStatus())) {
+                log.warn("app instance old status not match. " + serviceId + ":" + instanceId);
+            }
+            instance1.setStatus(to.getStatus());
         }
     }
 

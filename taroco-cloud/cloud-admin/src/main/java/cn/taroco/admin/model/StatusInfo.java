@@ -16,8 +16,9 @@
 package cn.taroco.admin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -26,9 +27,13 @@ import java.io.Serializable;
  *
  * @author liuht
  */
+@Getter
+@EqualsAndHashCode
+@ToString
 public class StatusInfo implements Serializable {
-	private static final long serialVersionUID = 2L;
-    public static final String STATUS_KEY = "status";
+
+	private static final long serialVersionUID = -1108780560907132217L;
+	public static final String STATUS_KEY = "status";
 
 	private final String status;
 	private final long timestamp;
@@ -58,14 +63,6 @@ public class StatusInfo implements Serializable {
         return valueOf("OFFLINE");
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
 	@JsonIgnore
 	public boolean isUp() {
 		return "UP".equals(status);
@@ -84,37 +81,6 @@ public class StatusInfo implements Serializable {
 	@JsonIgnore
 	public boolean isUnknown() {
 		return "UNKNOWN".equals(status);
-	}
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        StatusInfo that = (StatusInfo) o;
-
-        return new EqualsBuilder()
-                .append(timestamp, that.timestamp)
-                .append(status, that.status)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(status)
-                .append(timestamp)
-                .toHashCode();
-    }
-
-    @Override
-	public String toString() {
-		return "StatusInfo [status=" + status + ", timestamp=" + timestamp + "]";
 	}
 
 }

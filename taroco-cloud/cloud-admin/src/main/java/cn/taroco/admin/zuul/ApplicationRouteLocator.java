@@ -16,6 +16,7 @@
 package cn.taroco.admin.zuul;
 
 import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 import cn.taroco.admin.registry.ApplicationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,27 +59,28 @@ public class ApplicationRouteLocator implements RefreshableRouteLocator {
     protected List<ApplicationRoute> locateRoutes() {
         Collection<Application> applications = registry.getApplications();
 
-        List<ApplicationRoute> locateRoutes = new ArrayList<>(
-                applications.size() * (endpoints.length + 1));
+        List<ApplicationRoute> locateRoutes = new ArrayList<>();
 
-        for (Application application : applications) {
-            String healthCheckUrl = application.getInstance().getHealthCheckUrl();
-            addRoute(locateRoutes, application, "health", healthCheckUrl);
-            for (String endpoint : endpoints) {
-                String managementUrl = healthCheckUrl.substring(0, healthCheckUrl.lastIndexOf("/"));
-                addRoute(locateRoutes, application, endpoint,
-                        managementUrl + "/" + endpoint);
-            }
+        for (Application app : applications) {
+            app.getInstances().forEach(instance -> {
+                String healthCheckUrl = instance.getHealthCheckUrl();
+                addRoute(locateRoutes, instance, "health", healthCheckUrl);
+                for (String endpoint : endpoints) {
+                    String managementUrl = healthCheckUrl.substring(0, healthCheckUrl.lastIndexOf("/"));
+                    addRoute(locateRoutes, instance, endpoint,
+                            managementUrl + "/" + endpoint);
+                }
+            });
         }
 
         return locateRoutes;
     }
 
-    private void addRoute(List<ApplicationRoute> locateRoutes, Application application,
+    private void addRoute(List<ApplicationRoute> locateRoutes, Instance instance,
                           String endpoint, String targetUrl) {
-        ApplicationRoute route = new ApplicationRoute(application,
-                application.getInstance().getInstanceId() + "-" + endpoint, "/**", targetUrl,
-                prefix + application.getInstance().getInstanceId() + "/" + endpoint);
+        ApplicationRoute route = new ApplicationRoute(instance,
+                instance.getInstanceId() + "-" + endpoint, "/**", targetUrl,
+                prefix + instance.getInstanceId() + "/" + endpoint);
         locateRoutes.add(route);
     }
 
@@ -113,7 +115,7 @@ public class ApplicationRouteLocator implements RefreshableRouteLocator {
         } else {
             adjustedPath = path;
         }
-        return new ApplicationRoute(route.getApplication(), route.getId(), adjustedPath,
+        return new ApplicationRoute(route.getInstance(), route.getId(), adjustedPath,
                 route.getLocation(), route.getPrefix());
     }
 
@@ -155,17 +157,16 @@ public class ApplicationRouteLocator implements RefreshableRouteLocator {
     }
 
     public static class ApplicationRoute extends Route {
-        private final Application application;
+        private final Instance instance;
 
-        public ApplicationRoute(Application application, String id, String path, String location,
+        public ApplicationRoute(Instance instance, String id, String path, String location,
                                 String prefix) {
             super(id, path, location, prefix, false, null);
-            this.application = application;
+            this.instance = instance;
         }
 
-        public Application getApplication() {
-            return application;
+        public Instance getInstance() {
+            return instance;
         }
-
     }
 }

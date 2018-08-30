@@ -15,7 +15,7 @@
  */
 package cn.taroco.admin.event;
 
-import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 import cn.taroco.admin.model.StatusInfo;
 
 /**
@@ -28,9 +28,11 @@ public class ClientApplicationStatusChangedEvent extends ClientApplicationEvent 
     private final StatusInfo from;
     private final StatusInfo to;
 
-    public ClientApplicationStatusChangedEvent(Application application, StatusInfo from,
+    public ClientApplicationStatusChangedEvent(String serviceId,
+                                               Instance instance,
+                                               StatusInfo from,
                                                StatusInfo to) {
-        super(application, "STATUS_CHANGE");
+        super(serviceId, instance, "STATUS_CHANGE");
         this.from = from;
         this.to = to;
     }

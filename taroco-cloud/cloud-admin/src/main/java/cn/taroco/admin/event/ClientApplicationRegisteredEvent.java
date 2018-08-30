@@ -15,7 +15,7 @@
  */
 package cn.taroco.admin.event;
 
-import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 
 /**
  * 服务注册到admin
@@ -25,7 +25,7 @@ import cn.taroco.admin.model.Application;
 public class ClientApplicationRegisteredEvent extends ClientApplicationEvent {
 	private static final long serialVersionUID = 1L;
 
-	public ClientApplicationRegisteredEvent(Application application) {
-		super(application, "REGISTRATION");
+	public ClientApplicationRegisteredEvent(String serviceId, Instance instance) {
+		super(serviceId, instance, "REGISTRATION");
 	}
 }

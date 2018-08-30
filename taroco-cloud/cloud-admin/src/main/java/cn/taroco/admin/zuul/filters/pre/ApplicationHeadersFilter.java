@@ -65,7 +65,7 @@ public class ApplicationHeadersFilter extends ZuulFilter {
 		String requestURI = this.urlPathHelper.getPathWithinApplication(ctx.getRequest());
 		ApplicationRouteLocator.ApplicationRoute route = this.routeLocator.getMatchingRoute(requestURI);
 		if (route != null) {
-			HttpHeaders headers = headersProvider.getHeaders(route.getApplication());
+			HttpHeaders headers = headersProvider.getHeaders(route.getInstance());
 			for (Entry<String, List<String>> header : headers.entrySet()) {
 				ctx.addZuulRequestHeader(header.getKey(), header.getValue().get(0));
 			}
