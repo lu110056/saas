@@ -17,7 +17,7 @@ security:
   encode:
     key: '1234567887654321' #必须16位
   validate:
-    code: true
+    code: false
     preview: false
   sessions: stateless
   oauth2:
