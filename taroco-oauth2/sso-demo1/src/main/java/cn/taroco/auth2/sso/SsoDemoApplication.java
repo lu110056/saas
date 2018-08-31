@@ -42,6 +42,11 @@ public class SsoDemoApplication {
             return authentication;
         }
 
+        @GetMapping("/user")
+        public Object userinfo(Authentication authentication) {
+            return authentication.getPrincipal();
+        }
+
     }
 
 }
