@@ -1,6 +1,7 @@
 package cn.taroco.admin.web.client;
 
 import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
@@ -17,9 +18,9 @@ import java.nio.charset.StandardCharsets;
 public class BasicAuthHttpHeaderProvider implements HttpHeadersProvider {
 
 	@Override
-	public HttpHeaders getHeaders(Application application) {
-		String username = application.getMetadata().get("user.name");
-		String password = application.getMetadata().get("user.password");
+	public HttpHeaders getHeaders(Instance instance) {
+		String username = instance.getMetadata().get("user.name");
+		String password = instance.getMetadata().get("user.password");
 
 		HttpHeaders headers = new HttpHeaders();
 

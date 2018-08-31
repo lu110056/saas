@@ -16,7 +16,10 @@
 package cn.taroco.admin.converter;
 
 import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 import org.springframework.cloud.client.ServiceInstance;
+
+import java.util.Collection;
 
 /**
  * 转换 {@link ServiceInstance}s to {@link Application}s.
@@ -28,8 +31,9 @@ public interface ServiceInstanceConverter {
     /**
      * 转换 {@link ServiceInstance}s to {@link Application}
      *
-     * @param instance ServiceInstance
+     * @param serviceId 服务id
+     * @param instances  服务实例集合
      * @return Application
      */
-    Application convert(ServiceInstance instance);
+    Collection<Instance> convert(String serviceId, Collection<ServiceInstance> instances);
 }

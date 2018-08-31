@@ -6,7 +6,7 @@ import cn.taroco.admin.event.ClientApplicationDeregisteredEvent;
 import cn.taroco.admin.event.ClientApplicationRegisteredEvent;
 import cn.taroco.admin.event.ClientApplicationStatusChangedEvent;
 import cn.taroco.admin.event.RoutesOutdatedEvent;
-import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 import cn.taroco.admin.model.StatusInfo;
 import cn.taroco.admin.registry.ApplicationRegistry;
 import cn.taroco.admin.registry.store.ApplicationStore;
@@ -54,7 +54,7 @@ public class TarocoAdminServerAutoConfigration {
 
     @Bean("taskScheduler")
     public TaskScheduler taskScheduler(TarocoAdminServerProperties serverProperties) {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        final ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(serverProperties.getTask().getPoolSize());
         scheduler.setWaitForTasksToCompleteOnShutdown(true);
         scheduler.setThreadNamePrefix("taroco-admin-registrypool-");
@@ -98,11 +98,13 @@ public class TarocoAdminServerAutoConfigration {
 
     @EventListener
     public void onClientApplicationRegistered(ClientApplicationRegisteredEvent event) {
+        // 触发zuul 路由刷新
         publisher.publishEvent(new RoutesOutdatedEvent());
     }
 
     @EventListener
     public void onClientApplicationDeregistered(ClientApplicationDeregisteredEvent event) {
+        // 触发zuul 路由刷新
         publisher.publishEvent(new RoutesOutdatedEvent());
     }
 
@@ -111,7 +113,7 @@ public class TarocoAdminServerAutoConfigration {
      */
     @EventListener
     public void onApplicationReady(ApplicationReadyEvent applicationReadyEvent) {
-        ApplicationRegistry registry = applicationReadyEvent.getApplicationContext().getBean(ApplicationRegistry.class);
+        final ApplicationRegistry registry = applicationReadyEvent.getApplicationContext().getBean(ApplicationRegistry.class);
         registry.initInterval();
     }
 
@@ -119,18 +121,12 @@ public class TarocoAdminServerAutoConfigration {
      * 服务状态变更
      */
     @EventListener
-    public void onClientApplicationStatusChangedEvent(ClientApplicationStatusChangedEvent statusChangedEvent) {
-        StatusInfo from = statusChangedEvent.getFrom();
-        StatusInfo to = statusChangedEvent.getTo();
-        ApplicationStore store = applicationStore();
-        Application app = statusChangedEvent.getApplication();
-        app.getInstance().setStatus(to.getStatus());
-        if (from.isUp() && !to.isUp()) {
-            store.removeToDownMap(app);
-        }
-        if (to.isUp() && !from.isUp()) {
-            store.removeToUP(app);
-        }
+    public void onClientApplicationStatusChangedEvent(ClientApplicationStatusChangedEvent event) {
+        final StatusInfo from = event.getFrom();
+        final StatusInfo to = event.getTo();
+        final ApplicationStore store = applicationStore();
+        final Instance instance = event.getInstance();
+        store.statusChange(event.getServiceId(), instance.getInstanceId(), from, to);
     }
 
 }

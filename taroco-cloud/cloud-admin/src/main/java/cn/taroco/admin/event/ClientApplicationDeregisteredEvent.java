@@ -15,7 +15,7 @@
  */
 package cn.taroco.admin.event;
 
-import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 
 /**
  * 服务从admin删除
@@ -25,7 +25,7 @@ import cn.taroco.admin.model.Application;
 public class ClientApplicationDeregisteredEvent extends ClientApplicationEvent {
 	private static final long serialVersionUID = 1L;
 
-	public ClientApplicationDeregisteredEvent(Application application) {
-		super(application, "DEREGISTRATION");
+	public ClientApplicationDeregisteredEvent(String serviceId, Instance instance) {
+		super(serviceId, instance, "DEREGISTRATION");
 	}
 }

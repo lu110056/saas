@@ -16,14 +16,15 @@
 package cn.taroco.admin.converter;
 
 
-import cn.taroco.admin.model.Application;
 import cn.taroco.admin.model.Instance;
 import cn.taroco.admin.model.LeaseInfo;
 import com.netflix.appinfo.InstanceInfo;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 /**
  * ServiceInstanceConverter 实现
@@ -33,30 +34,28 @@ import java.util.Date;
 public class DefaultServiceInstanceConverter implements ServiceInstanceConverter {
 
     @Override
-    public Application convert(ServiceInstance instance) {
-        Application app = new Application();
-        app.setName(instance.getServiceId());
-        app.setHost(instance.getHost());
-        app.setPort(instance.getPort());
-        app.setSecure(instance.isSecure());
-        app.setUri(instance.getUri());
-        app.setMetadata(instance.getMetadata());
-        if (instance instanceof EurekaDiscoveryClient.EurekaServiceInstance) {
-            EurekaDiscoveryClient.EurekaServiceInstance eurekaServiceInstance = (EurekaDiscoveryClient.EurekaServiceInstance) instance;
-            InstanceInfo instanceInfo = eurekaServiceInstance.getInstanceInfo();
-            Instance ins = createInstance(instanceInfo);
-            app.setInstance(ins);
-        }
-        return app;
+    public Collection<Instance> convert(String serviceId, Collection<ServiceInstance> instances) {
+        return instances
+                .stream()
+                .map(instance -> {
+                    if (instance instanceof EurekaDiscoveryClient.EurekaServiceInstance) {
+                        final EurekaDiscoveryClient.EurekaServiceInstance eurekaServiceInstance = (EurekaDiscoveryClient
+                                .EurekaServiceInstance) instance;
+                        final InstanceInfo instanceInfo = eurekaServiceInstance.getInstanceInfo();
+                        return createInstance(instanceInfo);
+                    }
+                    return null;
+                }).collect(Collectors.toList());
     }
 
     /**
      * {@link InstanceInfo} 转 {@link Instance}
+     *
      * @param instanceInfo InstanceInfo
      * @return Instance
      */
     private Instance createInstance(InstanceInfo instanceInfo) {
-        Instance instance = new Instance();
+        final Instance instance = new Instance();
         instance.setInstanceId(instanceInfo.getInstanceId());
         instance.setHostName(instanceInfo.getHostName());
         instance.setAppName(instanceInfo.getAppName());
@@ -75,7 +74,7 @@ public class DefaultServiceInstanceConverter implements ServiceInstanceConverter
         instance.setLastUpdatedTime(new Date(instanceInfo.getLastUpdatedTimestamp()));
         instance.setLastDirtyTime(new Date(instanceInfo.getLastDirtyTimestamp()));
         instance.setActionType(instanceInfo.getActionType().name());
-        LeaseInfo leaseInfo = new LeaseInfo();
+        final LeaseInfo leaseInfo = new LeaseInfo();
         leaseInfo.setRenewalIntervalInSecs(instanceInfo.getLeaseInfo().getRenewalIntervalInSecs());
         leaseInfo.setDurationInSecs(instanceInfo.getLeaseInfo().getDurationInSecs());
         leaseInfo.setRegistrationTime(new Date(instanceInfo.getLeaseInfo().getRegistrationTimestamp()));

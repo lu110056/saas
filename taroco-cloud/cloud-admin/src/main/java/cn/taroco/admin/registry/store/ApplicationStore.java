@@ -16,9 +16,10 @@
 package cn.taroco.admin.registry.store;
 
 import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
+import cn.taroco.admin.model.StatusInfo;
 
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * 服务缓存接口
@@ -28,20 +29,12 @@ import java.util.Map;
 public interface ApplicationStore {
 
     /**
-     * 获取服务统计信息
+     * 缓存服务实例
      *
-     * @return 返回统计map
+     * @param serviceId 服务id
+     * @param instance  服务实例
      */
-    Map getSumMap();
-
-    /**
-     * 保存 服务
-     * 保存之前要检查服务是否已经Down掉的map当中
-     *
-     * @param app 需要保存的服务
-     * @return 保存失败/成功
-     */
-    Application save(Application app);
+    void save(String serviceId, Instance instance);
 
     /**
      * 返回所有服务列表,包括down掉的服务
@@ -51,41 +44,27 @@ public interface ApplicationStore {
     Collection<Application> findAll();
 
     /**
-     * 根据实例id返回服务,也要在downmap中找
+     * 查询实例详情
      *
-     * @param instanceId 实例id
+     * @param instanceId 服务实例id
      * @return Application
      */
-    Application find(String instanceId);
-
-    /**
-     * 根据服务名称 返回服务列表, 也要在downmap中找
-     *
-     * @param serviceId 服务名称
-     * @param status    服务状态
-     * @return Collection<Application>
-     */
-    Collection<Application> findByNameAndStatus(String serviceId, String status);
+    Instance find(String instanceId);
 
     /**
      * 根据实例id 删除服务, 也要在downmap中找
      *
      * @param instanceId 实例id
-     * @return 成功/失败
      */
-    Application delete(String instanceId);
+    void delete(String instanceId);
 
     /**
-     * 将down掉的服务移动到 downMap
+     * 服务实例状态变更
      *
-     * @param app 实例
+     * @param serviceId  服务id
+     * @param instanceId 实例id
+     * @param from       旧状态
+     * @param to         新状态
      */
-    void removeToDownMap(Application app);
-
-    /**
-     * 将UP的服务从dowmmap移出
-     *
-     * @param app 实例
-     */
-    void removeToUP(Application app);
+    void statusChange(String serviceId, String instanceId, StatusInfo from, StatusInfo to);
 }

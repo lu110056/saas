@@ -15,7 +15,7 @@
  */
 package cn.taroco.admin.web.client;
 
-import cn.taroco.admin.model.Application;
+import cn.taroco.admin.model.Instance;
 import org.springframework.http.HttpHeaders;
 
 /**
@@ -26,6 +26,6 @@ import org.springframework.http.HttpHeaders;
  */
 public interface HttpHeadersProvider {
 
-	HttpHeaders getHeaders(Application application);
+    HttpHeaders getHeaders(Instance instance);
 
 }
