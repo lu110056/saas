@@ -8,6 +8,7 @@ import cn.taroco.rbac.admin.model.entity.SysOauthClientDetails;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -57,6 +58,9 @@ public class OauthClientDetailsController extends BaseController {
      */
     @PostMapping
     public Response add(@RequestBody SysOauthClientDetails sysOauthClientDetails) {
+        if (StringUtils.isEmpty(sysOauthClientDetails.getAdditionalInformation())) {
+            sysOauthClientDetails.setAdditionalInformation(null);
+        }
         return Response.success(sysOauthClientDetailsService.insert(sysOauthClientDetails));
     }
 
