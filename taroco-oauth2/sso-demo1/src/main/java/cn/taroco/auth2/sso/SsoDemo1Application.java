@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @EnableOAuth2Sso
 @SpringBootApplication
-public class SsoDemoApplication {
+public class SsoDemo1Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(SsoDemoApplication.class, args);
+        SpringApplication.run(SsoDemo1Application.class, args);
     }
 
     @Bean
