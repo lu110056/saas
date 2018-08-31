@@ -1,6 +1,10 @@
 server:
   port: 9001
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 encrypt:
   key-store:
     location: classpath:taroco.jks
