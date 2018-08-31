@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SsoDemo2Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(SsoDemoApplication.class, args);
+        SpringApplication.run(SsoDemo2Application.class, args);
     }
 
     @Bean
