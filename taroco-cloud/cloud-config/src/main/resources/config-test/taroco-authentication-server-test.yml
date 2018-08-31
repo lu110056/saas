@@ -46,6 +46,9 @@ ignore:
   urls:
     - /authentication/**
     - /**/*.css
+    - /**/*.jpg
+    - /**/*.png
+    - /**/*.woff2
     - /**/*.js
     - /social
     - /signin

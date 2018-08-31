@@ -12,6 +12,8 @@
     <modules>
         <module>authentication-server</module>
         <module>oauth2-config</module>
+        <module>sso-demo1</module>
+        <module>sso-demo2</module>
     </modules>
     <artifactId>taroco-oauth2</artifactId>
 
