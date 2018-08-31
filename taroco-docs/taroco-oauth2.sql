@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2018-08-22 09:21:49
+Date: 2018-08-31 17:01:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -78,7 +78,7 @@ CREATE TABLE `sys_dict` (
   KEY `sys_dict_value` (`value`),
   KEY `sys_dict_label` (`label`),
   KEY `sys_dict_del_flag` (`del_flag`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
 
 -- ----------------------------
 -- Records of sys_dict
@@ -209,6 +209,8 @@ CREATE TABLE `sys_oauth_client_details` (
 -- ----------------------------
 -- Records of sys_oauth_client_details
 -- ----------------------------
+INSERT INTO `sys_oauth_client_details` VALUES ('sso-demo1', null, 'sso-demo1', 'read,write', 'password,refresh_token,authorization_code', '', null, null, null, null, 'true');
+INSERT INTO `sys_oauth_client_details` VALUES ('sso-demo2', '', 'sso-demo2', 'read,write', 'password,refresh_token,authorization_code', '', '', null, null, null, 'true');
 INSERT INTO `sys_oauth_client_details` VALUES ('taroco', null, 'taroco', 'server', 'password,refresh_token,authorization_code', null, null, null, null, null, 'false');
 
 -- ----------------------------
@@ -344,12 +346,12 @@ CREATE TABLE `sys_user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_idx1_username` (`username`),
   UNIQUE KEY `user_idx2_phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$vg5QNHhCknAqevx9vM2s5esllJEzF/pa8VZXtFYHhhOhUcCw/GWyS', null, '17034642111', null, null, '10', '2018-04-20 07:15:18', '2018-08-20 11:49:44', '0');
+INSERT INTO `sys_user` VALUES ('1', 'admin', '$2a$10$vg5QNHhCknAqevx9vM2s5esllJEzF/pa8VZXtFYHhhOhUcCw/GWyS', null, '17034642111', null, 'admin,super', '10', '2018-04-20 07:15:18', '2018-08-31 09:28:33', '0');
 
 -- ----------------------------
 -- Table structure for sys_user_role
