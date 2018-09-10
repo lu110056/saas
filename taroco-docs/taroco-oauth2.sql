@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 本机root
-Source Server Version : 50716
-Source Host           : localhost:3306
+Source Server         : taroco-mysql
+Source Server Version : 50723
+Source Host           : 111.231.192.110:3306
 Source Database       : taroco-oauth2
 
 Target Server Type    : MYSQL
-Target Server Version : 50716
+Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-08-31 17:01:33
+Date: 2018-09-10 17:32:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -140,20 +140,20 @@ CREATE TABLE `sys_menu` (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('1', '系统管理', null, '/admin', null, null, '-1', 'icon-xitongguanli', 'Layout', '1', '0', '2017-11-07 20:56:00', '2018-05-14 21:53:22', '0');
-INSERT INTO `sys_menu` VALUES ('2', '用户管理', null, 'user', '', null, '1', 'icon-yonghuguanli', 'views/admin/user/index', '2', '0', '2017-11-02 22:24:37', '2018-05-14 22:11:35', '0');
-INSERT INTO `sys_menu` VALUES ('3', '菜单管理', null, 'menu', '', null, '1', 'icon-caidanguanli', 'views/admin/menu/index', '3', '0', '2017-11-08 09:57:27', '2018-05-14 22:11:21', '0');
-INSERT INTO `sys_menu` VALUES ('4', '角色管理', null, 'role', null, null, '1', 'icon-jiaoseguanli', 'views/admin/role/index', '4', '0', '2017-11-08 10:13:37', '2018-05-14 22:11:19', '0');
-INSERT INTO `sys_menu` VALUES ('5', '日志管理', null, 'log', null, null, '1', 'icon-rizhiguanli', 'views/admin/log/index', '5', '0', '2017-11-20 14:06:22', '2018-05-14 22:11:18', '0');
-INSERT INTO `sys_menu` VALUES ('6', '字典管理', null, 'dict', null, null, '1', 'icon-zygl', 'views/admin/dict/index', '6', '0', '2017-11-29 11:30:52', '2018-05-14 22:12:48', '0');
-INSERT INTO `sys_menu` VALUES ('7', '部门管理', null, 'dept', null, null, '1', 'icon-iconbmgl', 'views/admin/dept/index', '7', '0', '2018-01-20 13:17:19', '2018-05-14 22:11:16', '0');
-INSERT INTO `sys_menu` VALUES ('8', '系统监控', null, '/taroco-admin', null, null, '-1', 'icon-iconbmgl', 'Layout', '8', '0', '2018-01-22 12:30:41', '2018-05-14 20:41:16', '0');
-INSERT INTO `sys_menu` VALUES ('14', '接口文档', null, 'http://111.231.192.110:10000/swagger-ui.html', '', null, '8', 'icon-wendangdocument72', null, '2', '0', '2018-01-23 10:56:43', '2018-08-09 09:19:18', '0');
+INSERT INTO `sys_menu` VALUES ('1', '系统管理', null, '/admin', null, null, '-1', 'wordpress', 'Layout', '1', '0', '2017-11-07 20:56:00', '2018-09-08 01:46:08', '0');
+INSERT INTO `sys_menu` VALUES ('2', '用户管理', null, 'user', '', null, '1', 'file-o', 'views/admin/user/index', '2', '0', '2017-11-02 22:24:37', '2018-09-08 02:01:44', '0');
+INSERT INTO `sys_menu` VALUES ('3', '菜单管理', null, 'menu', '', null, '1', 'file-o', 'views/admin/menu/index', '3', '0', '2017-11-08 09:57:27', '2018-09-08 02:01:45', '0');
+INSERT INTO `sys_menu` VALUES ('4', '角色管理', null, 'role', null, null, '1', 'file-o', 'views/admin/role/index', '4', '0', '2017-11-08 10:13:37', '2018-09-08 02:01:49', '0');
+INSERT INTO `sys_menu` VALUES ('5', '日志管理', null, 'log', null, null, '1', 'file-o', 'views/admin/log/index', '5', '0', '2017-11-20 14:06:22', '2018-09-08 02:01:49', '0');
+INSERT INTO `sys_menu` VALUES ('6', '字典管理', null, 'dict', null, null, '1', 'file-o', 'views/admin/dict/index', '6', '0', '2017-11-29 11:30:52', '2018-09-08 02:01:49', '0');
+INSERT INTO `sys_menu` VALUES ('7', '部门管理', null, 'dept', null, null, '1', 'file-o', 'views/admin/dept/index', '7', '0', '2018-01-20 13:17:19', '2018-09-08 02:01:49', '0');
+INSERT INTO `sys_menu` VALUES ('8', '系统监控', null, '/taroco-admin', null, null, '-1', 'pie-chart', 'Layout', '8', '0', '2018-01-22 12:30:41', '2018-09-08 01:59:13', '0');
+INSERT INTO `sys_menu` VALUES ('14', '接口文档', null, 'taroco-api', '', null, '8', 'file-text-o', 'views/service/swagger/index', '2', '0', '2018-01-23 10:56:43', '2018-09-10 06:58:57', '0');
 INSERT INTO `sys_menu` VALUES ('21', '用户查看', '', null, '/admin/user/**', 'GET', '2', null, null, null, '1', '2017-11-07 20:58:05', '2018-02-04 14:28:49', '0');
 INSERT INTO `sys_menu` VALUES ('22', '用户新增', 'sys_user_add', null, '/admin/user/*', 'POST', '2', null, null, null, '1', '2017-11-08 09:52:09', '2017-12-04 16:31:10', '0');
 INSERT INTO `sys_menu` VALUES ('23', '用户修改', 'sys_user_upd', null, '/admin/user/**', 'PUT', '2', null, null, null, '1', '2017-11-08 09:52:48', '2018-01-17 17:40:01', '0');
 INSERT INTO `sys_menu` VALUES ('24', '用户删除', 'sys_user_del', null, '/admin/user/*', 'DELETE', '2', null, null, null, '1', '2017-11-08 09:54:01', '2017-12-04 16:31:18', '0');
-INSERT INTO `sys_menu` VALUES ('25', '服务监控', null, 'service', null, null, '8', 'icon-dongtai', 'views/service/index', '1', '0', '2018-08-10 08:09:16', '2018-08-10 08:09:55', '0');
+INSERT INTO `sys_menu` VALUES ('25', '服务监控', null, 'service', null, null, '8', 'server', 'views/service/index', '1', '0', '2018-08-10 08:09:16', '2018-09-08 01:59:53', '0');
 INSERT INTO `sys_menu` VALUES ('31', '菜单查看', null, null, '/admin/menu/**', 'GET', '3', null, null, null, '1', '2017-11-08 09:57:56', '2017-11-14 17:29:17', '0');
 INSERT INTO `sys_menu` VALUES ('32', '菜单新增', 'sys_menu_add', null, '/admin/menu/*', 'POST', '3', null, null, null, '1', '2017-11-08 10:15:53', '2018-01-20 14:37:50', '0');
 INSERT INTO `sys_menu` VALUES ('33', '菜单修改', 'sys_menu_edit', null, '/admin/menu/*', 'PUT', '3', null, null, null, '1', '2017-11-08 10:16:23', '2018-01-20 14:37:56', '0');
@@ -173,12 +173,12 @@ INSERT INTO `sys_menu` VALUES ('71', '部门查看', '', null, '/admin/dept/**',
 INSERT INTO `sys_menu` VALUES ('72', '部门新增', 'sys_dept_add', null, '/admin/dept/**', 'POST', '7', null, null, null, '1', '2018-01-20 14:56:16', '2018-01-20 21:17:57', '0');
 INSERT INTO `sys_menu` VALUES ('73', '部门修改', 'sys_dept_edit', null, '/admin/dept/**', 'PUT', '7', null, null, null, '1', '2018-01-20 14:56:59', '2018-01-20 21:17:59', '0');
 INSERT INTO `sys_menu` VALUES ('74', '部门删除', 'sys_dept_del', null, '/admin/dept/**', 'DELETE', '7', null, null, null, '1', '2018-01-20 14:57:28', '2018-01-20 21:18:05', '0');
-INSERT INTO `sys_menu` VALUES ('100', '客户端管理', '', 'client', '', '', '1', 'icon-bangzhushouji', 'views/admin/client/index', '9', '0', '2018-01-20 13:17:19', '2018-05-15 21:28:10', '0');
+INSERT INTO `sys_menu` VALUES ('100', '客户端管理', '', 'client', '', '', '1', 'file-o', 'views/admin/client/index', '9', '0', '2018-01-20 13:17:19', '2018-09-08 02:02:02', '0');
 INSERT INTO `sys_menu` VALUES ('101', '客户端新增', 'sys_client_add', null, '/admin/client/**', 'POST', '100', '1', null, null, '1', '2018-05-15 21:35:18', '2018-05-16 10:35:26', '0');
 INSERT INTO `sys_menu` VALUES ('102', '客户端修改', 'sys_client_upd', null, '/admin/client/**', 'PUT', '100', null, null, null, '1', '2018-05-15 21:37:06', '2018-05-15 21:52:30', '0');
 INSERT INTO `sys_menu` VALUES ('103', '客户端删除', 'sys_client_del', null, '/admin/client/**', 'DELETE', '100', null, null, null, '1', '2018-05-15 21:39:16', '2018-05-15 21:52:34', '0');
 INSERT INTO `sys_menu` VALUES ('104', '客户端查看', null, null, '/admin/client/**', 'GET', '100', null, null, null, '1', '2018-05-15 21:39:57', '2018-05-15 21:52:40', '0');
-INSERT INTO `sys_menu` VALUES ('110', '路由管理', null, 'route', null, null, '1', 'icon-luyou', 'views/admin/route/index', '8', '0', '2018-05-15 21:44:51', '2018-05-16 06:58:20', '0');
+INSERT INTO `sys_menu` VALUES ('110', '路由管理', null, 'route', null, null, '1', 'file-o', 'views/admin/route/index', '8', '0', '2018-05-15 21:44:51', '2018-09-08 02:02:07', '0');
 INSERT INTO `sys_menu` VALUES ('111', '路由查看', null, null, '/admin/route/**', 'GET', '110', null, null, null, '1', '2018-05-15 21:45:59', '2018-05-16 07:23:04', '0');
 INSERT INTO `sys_menu` VALUES ('112', '路由新增', 'sys_route_add', null, '/admin/route/**', 'POST', '110', null, null, null, '1', '2018-05-15 21:52:22', '2018-05-15 21:53:46', '0');
 INSERT INTO `sys_menu` VALUES ('113', '路由修改', 'sys_route_upd', null, '/admin/route/**', 'PUT', '110', null, null, null, '1', '2018-05-15 21:55:38', null, '0');
