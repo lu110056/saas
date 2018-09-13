@@ -35,7 +35,7 @@ Spring Cloud 本身已经封装得足够简单，也够丰富。也许正是因�
 
 ### 整体架构
 
-![架构图](taroco-docs/files/taroco%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg)
+![架构图](https://github.com/liuht777/Taroco/blob/master/taroco-docs/files/taroco%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg)
 
 ### 项目截图
 
