@@ -114,18 +114,23 @@ public class PreRequestLogFilter extends ZuulFilter {
      * 获取get 参数
      */
     private String queryParam(HttpServletRequest request) {
-        StringBuilder params = new StringBuilder("?");
+        StringBuilder params = new StringBuilder();
         final Enumeration<String> names = request.getParameterNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             params.append(name);
             params.append("=");
-            params.append(request.getParameter(name));
+            if ("password".equals(name)) {
+                params.append("******");
+            } else {
+                params.append(request.getParameter(name));
+            }
             params.append("&");
         }
         if (params.length() > 0) {
             params.delete(params.length()-1, params.length());
+            return params.toString();
         }
-        return params.toString();
+        return null;
     }
 }
