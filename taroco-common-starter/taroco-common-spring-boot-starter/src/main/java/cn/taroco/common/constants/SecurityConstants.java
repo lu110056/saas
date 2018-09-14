@@ -116,15 +116,6 @@ public interface SecurityConstants {
     String TOKEN_USER_DETAIL = "token-user-detail";
 
     /**
-     * 默认的social的登录地址
-     */
-    String DEFAULT_SOCIAL_PROCESS_URL = "/social";
-    /**
-     * 默认的social的注册地址
-     */
-    String DEFAULT_SOCIAL_SIGNUP_URL = "/social/signup";
-
-    /**
      * sys_oauth_client_details 表的字段，不包括client_id、client_secret
      */
     String CLIENT_FIELDS = "client_id, client_secret, resource_ids, scope, "

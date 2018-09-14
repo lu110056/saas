@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-09-10 17:32:09
+Date: 2018-09-13 17:57:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -90,7 +90,7 @@ CREATE TABLE `sys_dict` (
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `type` char(1) DEFAULT '1' COMMENT '日志类型',
+  `type` varchar(50) NOT NULL DEFAULT '1' COMMENT '日志类型',
   `title` varchar(255) DEFAULT '' COMMENT '日志标题',
   `service_id` varchar(32) DEFAULT NULL COMMENT '服务ID',
   `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',

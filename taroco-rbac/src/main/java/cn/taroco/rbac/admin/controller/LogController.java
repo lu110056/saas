@@ -2,6 +2,8 @@ package cn.taroco.rbac.admin.controller;
 
 
 import cn.taroco.common.constants.CommonConstant;
+import cn.taroco.common.entity.SysLog;
+import cn.taroco.common.exception.ClientException;
 import cn.taroco.common.utils.Query;
 import cn.taroco.common.web.BaseController;
 import cn.taroco.common.web.Response;
@@ -9,8 +11,10 @@ import cn.taroco.rbac.admin.service.SysLogService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 /**
@@ -48,5 +52,19 @@ public class LogController extends BaseController {
     @DeleteMapping("/{id}")
     public Response delete(@PathVariable Long id) {
         return Response.success(sysLogService.updateByLogId(id));
+    }
+
+    /**
+     * 添加日志
+     *
+     * @param log 日志实体
+     * @param result 错误信息
+     */
+    @PostMapping
+    public void add(@Valid @RequestBody SysLog log, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new ClientException(result.getAllErrors().get(0).getDefaultMessage());
+        }
+        sysLogService.insert(log);
     }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class SysLog implements Serializable {
     /**
      * 日志类型
      */
+    @NotEmpty(message = "日志类型不能为空")
     private String type;
     /**
      * 日志标题
@@ -86,25 +88,4 @@ public class SysLog implements Serializable {
      * 服务ID
      */
     private String serviceId;
-
-
-    @Override
-    public String toString() {
-        return "SysLog{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                ", title='" + title + '\'' +
-                ", createBy='" + createBy + '\'' +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                ", remoteAddr='" + remoteAddr + '\'' +
-                ", userAgent='" + userAgent + '\'' +
-                ", requestUri='" + requestUri + '\'' +
-                ", method='" + method + '\'' +
-                ", params='" + params + '\'' +
-                ", time=" + time +
-                ", delFlag='" + delFlag + '\'' +
-                ", exception='" + exception + '\'' +
-                '}';
-    }
 }
