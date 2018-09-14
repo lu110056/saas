@@ -70,46 +70,62 @@ public class PreRequestLogFilter extends ZuulFilter {
      */
     private void addLog(HttpServletRequest request, RequestContext ctx) {
         final SysLog log = new SysLog();
-        if (StrUtil.containsAnyIgnoreCase(request.getRequestURI(),
-                SecurityConstants.OAUTH_TOKEN_URL, SecurityConstants.MOBILE_TOKEN_URL)) {
-            log.setType(LogType.Login.name());
-            log.setTitle(LogType.Login.name());
-        } else {
-            log.setType(LogType.Request.name());
-            log.setTitle(LogType.Request.name());
-        }
-        log.setCreateBy(ctx.getZuulRequestHeaders().get(SecurityConstants.USER_HEADER));
         log.setCreateTime(new Date());
         log.setRemoteAddr(request.getRemoteAddr());
         log.setRequestUri(request.getRequestURI());
         log.setMethod(request.getMethod());
 
-        if (HttpMethod.GET.matches(request.getMethod())) {
-            StringBuilder params = new StringBuilder("?");
-            final Enumeration<String> names = request.getParameterNames();
-            while (names.hasMoreElements()) {
-                String name = names.nextElement();
-                params.append(name);
-                params.append("=");
-                params.append(request.getParameter(name));
-                params.append("&");
-            }
-            if (params.length() > 0) {
-                params.delete(params.length()-1, params.length());
-            }
-            log.setParams(params.toString());
-        }
-        if (!ctx.isChunkedRequestBody()) {
-            try {
-                ServletInputStream stream = request.getInputStream();
-                if (stream != null) {
-                    final String body = IOUtils.toString(stream, Charset.defaultCharset());
-                    log.setParams(body);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (StrUtil.containsAnyIgnoreCase(request.getRequestURI(),
+                SecurityConstants.OAUTH_TOKEN_URL, SecurityConstants.MOBILE_TOKEN_URL)) {
+            // 记录登录日志
+            log.setType(LogType.Login.name());
+            log.setTitle(LogType.Login.name());
+            log.setParams(queryParam(request));
+            log.setCreateBy(request.getParameter("username"));
+            logService.add(log);
+        } else {
+            if (!HttpMethod.GET.matches(request.getMethod())) {
+                // 记录操作日志
+                log.setType(LogType.Operation.name());
+                log.setTitle(LogType.Operation.name());
+                log.setParams(queryBody(request));
+                log.setCreateBy(ctx.getZuulRequestHeaders().get(SecurityConstants.USER_HEADER));
+                logService.add(log);
             }
         }
-        logService.add(log);
+    }
+
+    /**
+     * 获取请求body
+     */
+    private String queryBody(HttpServletRequest request) {
+        try {
+            ServletInputStream stream = request.getInputStream();
+            if (stream != null) {
+                return IOUtils.toString(stream, Charset.defaultCharset());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取get 参数
+     */
+    private String queryParam(HttpServletRequest request) {
+        StringBuilder params = new StringBuilder("?");
+        final Enumeration<String> names = request.getParameterNames();
+        while (names.hasMoreElements()) {
+            String name = names.nextElement();
+            params.append(name);
+            params.append("=");
+            params.append(request.getParameter(name));
+            params.append("&");
+        }
+        if (params.length() > 0) {
+            params.delete(params.length()-1, params.length());
+        }
+        return params.toString();
     }
 }

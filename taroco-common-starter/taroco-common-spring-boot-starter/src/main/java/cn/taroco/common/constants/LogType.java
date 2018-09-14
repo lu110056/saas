@@ -8,12 +8,12 @@ package cn.taroco.common.constants;
  */
 public enum LogType {
     /**
-     * 登录
+     * 登录日志
      */
     Login,
 
     /**
-     * http 请求
+     * 操作日志
      */
-    Request;
+    Operation;
 }
