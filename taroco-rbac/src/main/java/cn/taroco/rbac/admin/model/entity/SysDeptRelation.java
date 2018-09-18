@@ -3,6 +3,7 @@ package cn.taroco.rbac.admin.model.entity;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
  * @author liuht
  * @since 2018-01-22
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("sys_dept_relation")
 public class SysDeptRelation extends Model<SysDeptRelation> {

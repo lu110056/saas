@@ -1,6 +1,7 @@
 package cn.taroco.gateway.filter;
 
-import cn.taroco.gateway.filter.pre.*;
+import cn.taroco.gateway.filter.pre.PreRequestLogFilter;
+import cn.taroco.gateway.filter.pre.XlabelRequestPreFilter;
 import com.netflix.zuul.ZuulFilter;
 
 /**
@@ -21,11 +22,6 @@ public interface MyFilterConstants {
      * Filter Order for {@link PreRequestLogFilter#filterOrder()}
      */
     int PRE_REQUEST_LOG_ORDER = Integer.MAX_VALUE;
-
-    /**
-     * Filter Order for {@link WebSocketFilter#filterOrder()}
-     */
-    int PRE_WEBSOCKET_ORDER = 10002;
 
     /**
      * Filter Order for {@link PreRequestLogFilter#filterOrder()}

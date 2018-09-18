@@ -2,8 +2,7 @@ package cn.taroco.common.ribbon;
 
 import cn.taroco.common.constants.CommonConstant;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -14,13 +13,12 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 
 /**
- * http request 拦截器 用于传递x-label标签
+ * httpclient request 拦截器 用于传递x-label标签
  *
  * @author liuht
  */
-public class XlabelHttpRequestInterceptor implements ClientHttpRequestInterceptor {
-
-    private static final Logger logger = LoggerFactory.getLogger(XlabelHttpRequestInterceptor.class);
+@Slf4j
+public class XlabelHttpclientRequestInterceptor implements ClientHttpRequestInterceptor {
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
@@ -31,8 +29,8 @@ public class XlabelHttpRequestInterceptor implements ClientHttpRequestIntercepto
         }
 
         HttpRequestWrapper requestWrapper = new HttpRequestWrapper(request);
-        String header = StringUtils.collectionToDelimitedString(XlabelHeaderInterceptor.LABEL.get(), CommonConstant.HEADER_LABEL_SPLIT);
-        logger.info("label: " + header);
+        String header = StringUtils.collectionToDelimitedString(XlabelMvcHeaderInterceptor.LABEL.get(), CommonConstant.HEADER_LABEL_SPLIT);
+        log.debug("Pass x-label by httpclient: " + header);
         requestWrapper.getHeaders().add(CommonConstant.HEADER_LABEL, header);
 
         return execution.execute(requestWrapper, body);

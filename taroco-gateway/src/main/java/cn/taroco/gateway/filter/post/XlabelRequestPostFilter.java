@@ -1,6 +1,6 @@
 package cn.taroco.gateway.filter.post;
 
-import cn.taroco.common.ribbon.XlabelHeaderInterceptor;
+import cn.taroco.common.ribbon.XlabelMvcHeaderInterceptor;
 import com.netflix.zuul.ZuulFilter;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,7 @@ public class XlabelRequestPostFilter extends ZuulFilter{
 
     @Override
     public Object run() {
-        XlabelHeaderInterceptor.shutdownHystrixRequestContext();
+        XlabelMvcHeaderInterceptor.shutdownHystrixRequestContext();
         return null;
     }
 }

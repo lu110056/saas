@@ -45,7 +45,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     private SysMenuService sysMenuService;
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate redisTemplate;
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired

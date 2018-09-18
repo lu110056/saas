@@ -46,7 +46,7 @@ public class XlabelWeightMetadataRule extends ZoneAvoidanceRule {
             if(!StringUtils.isEmpty(labelOr)){
                 String[] metadataLabel = labelOr.split(CommonConstant.HEADER_LABEL_SPLIT);
                 for (String label : metadataLabel) {
-                    if(XlabelHeaderInterceptor.LABEL.get().contains(label)){
+                    if(XlabelMvcHeaderInterceptor.LABEL.get().contains(label)){
                         return server;
                     }
                 }
@@ -55,7 +55,7 @@ public class XlabelWeightMetadataRule extends ZoneAvoidanceRule {
             String labelAnd = metadata.get(CommonConstant.LABEL_AND);
             if(!StringUtils.isEmpty(labelAnd)){
                 List<String> metadataLabel = Arrays.asList(labelAnd.split(CommonConstant.HEADER_LABEL_SPLIT));
-                if(XlabelHeaderInterceptor.LABEL.get().containsAll(metadataLabel)){
+                if(XlabelMvcHeaderInterceptor.LABEL.get().containsAll(metadataLabel)){
                     return server;
                 }
             }

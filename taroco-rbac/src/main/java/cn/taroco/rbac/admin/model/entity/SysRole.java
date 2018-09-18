@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.Date;
  * @author liuht
  * @since 2017-10-29
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("sys_role")
 public class SysRole extends Model<SysRole> {
