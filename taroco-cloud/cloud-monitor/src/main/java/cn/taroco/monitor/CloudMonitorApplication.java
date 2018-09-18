@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.netflix.turbine.EnableTurbine;
+import zipkin.server.internal.EnableZipkinServer;
 
 /**
  * 服务监控
@@ -16,6 +17,7 @@ import org.springframework.cloud.netflix.turbine.EnableTurbine;
 @EnableDiscoveryClient
 @EnableTurbine
 @EnableHystrixDashboard
+@EnableZipkinServer
 public class CloudMonitorApplication {
 
     public static void main(String[] args) {
