@@ -2,10 +2,9 @@ package cn.taroco.rbac.admin.service.impl;
 
 import cn.taroco.common.constants.CommonConstant;
 import cn.taroco.common.entity.SysLog;
-import cn.taroco.rbac.admin.service.SysLogService;
 import cn.taroco.rbac.admin.mapper.SysLogMapper;
+import cn.taroco.rbac.admin.service.SysLogService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.xiaoleilu.hutool.lang.Assert;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -23,8 +22,6 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
 
     @Override
     public Boolean updateByLogId(Long id) {
-        Assert.isNull(id, "日志ID为空");
-
         SysLog sysLog = new SysLog();
         sysLog.setId(id);
         sysLog.setDelFlag(CommonConstant.STATUS_DEL);

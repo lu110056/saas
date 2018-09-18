@@ -10,6 +10,8 @@ base:
     host: 172.27.0.11
     port: 6379
     password: taroco!@#$
+  zipkin:
+    url: http://localhost:10002
 
 server:
   tomcat:

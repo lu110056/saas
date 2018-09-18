@@ -2,6 +2,11 @@
 
 # jpa配置 数据源配置
 spring:
+  zipkin:
+    base-url: ${base.zipkin.url}
+  sleuth:
+    sampler:
+      percentage: 1.0
   datasource:
     url: ${base.mysql.url}/taroco-oauth2
     username: root

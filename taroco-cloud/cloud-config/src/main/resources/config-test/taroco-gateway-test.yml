@@ -6,6 +6,11 @@ spring:
     port: ${base.redis.port}
     password: ${base.redis.password}
     database: 0
+  zipkin:
+    base-url: ${base.zipkin.url}
+  sleuth:
+    sampler:
+      percentage: 1.0
 
 # 路由配置
 zuul:

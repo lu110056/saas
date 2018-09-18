@@ -2,6 +2,11 @@
 
 # jpa配置 数据源配置
 spring:
+  zipkin:
+    base-url: ${base.zipkin.url}
+  sleuth:
+    sampler:
+      percentage: 1.0
   jpa:
     show-sql: true
     generate-ddl: true
