@@ -8,8 +8,6 @@ import cn.taroco.rbac.admin.service.SysMenuService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,13 +26,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private SysMenuMapper sysMenuMapper;
 
     @Override
-    @Cacheable(value = "menu_details", key = "#role  + '_menu'")
     public List<MenuVO> findMenuByRoleName(String role) {
         return sysMenuMapper.findMenuByRoleName(role);
     }
 
     @Override
-    @CacheEvict(value = "menu_details", allEntries = true)
     public Boolean deleteMenu(Integer id) {
         // 删除当前节点
         SysMenu condition1 = new SysMenu();
@@ -51,7 +47,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    @CacheEvict(value = "menu_details", allEntries = true)
     public Boolean updateMenuById(SysMenu sysMenu) {
         return this.updateById(sysMenu);
     }

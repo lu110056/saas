@@ -7,6 +7,7 @@ import cn.taroco.common.vo.MenuVO;
 import cn.taroco.common.vo.SysRole;
 import cn.taroco.common.vo.UserVO;
 import cn.taroco.common.web.Response;
+import cn.taroco.rbac.admin.mapper.SysUserMapper;
 import cn.taroco.rbac.admin.model.dto.UserDTO;
 import cn.taroco.rbac.admin.model.dto.UserInfo;
 import cn.taroco.rbac.admin.model.entity.SysDeptRelation;
@@ -16,8 +17,6 @@ import cn.taroco.rbac.admin.service.SysDeptRelationService;
 import cn.taroco.rbac.admin.service.SysMenuService;
 import cn.taroco.rbac.admin.service.SysUserRoleService;
 import cn.taroco.rbac.admin.service.SysUserService;
-import cn.taroco.rbac.admin.mapper.SysUserMapper;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -26,8 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,7 +45,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     private SysMenuService sysMenuService;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
@@ -95,7 +92,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @Cacheable(value = "user_details", key = "#username")
     public UserVO findUserByUsername(String username) {
         return sysUserMapper.selectUserVoByUsername(username);
     }
@@ -107,7 +103,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return 用户信息
      */
     @Override
-    @Cacheable(value = "user_details_mobile", key = "#mobile")
     public UserVO findUserByMobile(String mobile) {
         return sysUserMapper.selectUserVoByMobile(mobile);
     }
@@ -119,7 +114,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return 用户信息
      */
     @Override
-    @Cacheable(value = "user_details_openid", key = "#openId")
     public UserVO findUserByOpenId(String openId) {
         return sysUserMapper.selectUserVoByOpenId(openId);
     }
@@ -186,18 +180,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
 
         String code = RandomUtil.randomNumbers(4);
-        JSONObject contextJson = new JSONObject();
-        contextJson.put("code", code);
-        contextJson.put("product", "TarocoCloud");
         log.info("短信发送请求消息中心 -> 手机号:{} -> 验证码：{}", mobile, code);
-//        rabbitTemplate.convertAndSend(MqQueueConstant.MOBILE_CODE_QUEUE,
-//                new MobileMsgTemplate(
-//                        mobile,
-//                        contextJson.toJSONString(),
-//                        CommonConstant.ALIYUN_SMS,
-//                        EnumSmsChannelTemplate.LOGIN_NAME_LOGIN.getSignName(),
-//                        EnumSmsChannelTemplate.LOGIN_NAME_LOGIN.getTemplate()
-//                ));
         redisTemplate
                 .opsForValue()
                 .set(SecurityConstants.DEFAULT_CODE_KEY + mobile, code, SecurityConstants.DEFAULT_IMAGE_EXPIRE, TimeUnit.SECONDS);
@@ -211,7 +194,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return Boolean
      */
     @Override
-    @CacheEvict(value = "user_details", key = "#sysUser.username")
     public Boolean deleteUserById(SysUser sysUser) {
         sysUserRoleService.deleteByUserId(sysUser.getUserId());
         this.deleteById(sysUser.getUserId());
@@ -219,7 +201,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @CacheEvict(value = "user_details", key = "#username")
     public Response updateUserInfo(UserDTO userDto, String username) {
         UserVO userVo = this.findUserByUsername(username);
         SysUser sysUser = new SysUser();
@@ -239,7 +220,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    @CacheEvict(value = "user_details", key = "#username")
     public Boolean updateUser(UserDTO userDto, String username) {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(userDto, sysUser);

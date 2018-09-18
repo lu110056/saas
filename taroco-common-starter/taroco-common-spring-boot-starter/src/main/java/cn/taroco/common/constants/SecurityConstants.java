@@ -88,7 +88,7 @@ public interface SecurityConstants {
     /**
      * 边框颜色，合法值： r,g,b (and optional alpha) 或者 white,black,blue.
      */
-    String DEFAULT_COLOR_FONT = "black";
+    String DEFAULT_COLOR_FONT = "blue";
 
     /**
      * 图片边框

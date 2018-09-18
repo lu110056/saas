@@ -1,6 +1,6 @@
 package cn.taroco.admin.model;
 
-import cn.taroco.common.utils.TarocoConstants;
+import cn.taroco.common.constants.CommonConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -30,21 +30,21 @@ public class LeaseInfo implements Serializable {
     /**
      *  注册时间
      */
-    @JsonFormat(pattern = TarocoConstants.DATETIME_FORMAT, timezone = "GMT+8")
+    @JsonFormat(pattern = CommonConstant.DATETIME_FORMAT, timezone = "GMT+8")
     private Date registrationTime;
     /**
      * 最后续约时间
      */
-    @JsonFormat(pattern = TarocoConstants.DATETIME_FORMAT, timezone = "GMT+8")
+    @JsonFormat(pattern = CommonConstant.DATETIME_FORMAT, timezone = "GMT+8")
     private Date lastRenewalTime;
     /**
      * 剔除时间
      */
-    @JsonFormat(pattern = TarocoConstants.DATETIME_FORMAT, timezone = "GMT+8")
+    @JsonFormat(pattern = CommonConstant.DATETIME_FORMAT, timezone = "GMT+8")
     private Date evictionTime;
     /**
      * 服务上线时间
      */
-    @JsonFormat(pattern = TarocoConstants.DATETIME_FORMAT, timezone = "GMT+8")
+    @JsonFormat(pattern = CommonConstant.DATETIME_FORMAT, timezone = "GMT+8")
     private Date serviceUpTime;
 }

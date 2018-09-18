@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 /**
  * zuul gateway
@@ -17,7 +16,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableFeignClients
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableResJwtTokenStore
 public class GatewayApplication {
 

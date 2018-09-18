@@ -1,5 +1,7 @@
 package cn.taroco.rbac.admin.service.impl;
 
+import cn.taroco.common.utils.Query;
+import cn.taroco.rbac.admin.mapper.SysRoleDeptMapper;
 import cn.taroco.rbac.admin.mapper.SysRoleMapper;
 import cn.taroco.rbac.admin.model.dto.RoleDTO;
 import cn.taroco.rbac.admin.model.entity.SysRole;
@@ -8,8 +10,6 @@ import cn.taroco.rbac.admin.service.SysRoleService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import cn.taroco.rbac.admin.mapper.SysRoleDeptMapper;
-import cn.taroco.common.utils.Query;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

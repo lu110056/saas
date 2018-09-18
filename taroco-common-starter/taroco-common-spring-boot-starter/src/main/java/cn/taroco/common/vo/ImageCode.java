@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ImageCode implements Serializable {
+    private static final long serialVersionUID = -7793702910139171647L;
     private String code;
 
     private LocalDateTime expireTime;
