@@ -44,7 +44,7 @@ public class TarocoRibbonAutoConfigure extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new XlabelHeaderInterceptor());
+        registry.addInterceptor(new XlabelMvcHeaderInterceptor());
     }
 
     @Autowired
@@ -54,7 +54,7 @@ public class TarocoRibbonAutoConfigure extends WebMvcConfigurerAdapter {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getInterceptors().add(new XlabelHttpRequestInterceptor());
+        restTemplate.getInterceptors().add(new XlabelHttpclientRequestInterceptor());
         restTemplate.setRequestFactory(httpRequestFactory());
         return restTemplate;
     }

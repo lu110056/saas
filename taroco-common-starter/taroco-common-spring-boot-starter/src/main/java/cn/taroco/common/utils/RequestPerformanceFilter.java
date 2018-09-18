@@ -28,7 +28,6 @@ public class RequestPerformanceFilter extends OncePerRequestFilter implements Fi
         HttpServletResponseWrapper httpResponse = new HttpServletResponseWrapper(response);
         Throwable failed = null;
         long start = System.currentTimeMillis();
-        String uri = request.getRequestURL().toString();
         try {
             filterChain.doFilter(request, httpResponse);
         } catch (Throwable e) {

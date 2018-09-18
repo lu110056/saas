@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ import java.util.Date;
  * @author liuht
  * @since 2017-11-19
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("sys_dict")
 public class SysDict extends Model<SysDict> {

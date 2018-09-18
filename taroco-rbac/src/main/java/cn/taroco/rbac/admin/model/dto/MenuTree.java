@@ -2,11 +2,13 @@ package cn.taroco.rbac.admin.model.dto;
 
 import cn.taroco.common.vo.MenuVO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author liuht
  * @date 2017年11月9日23:33:27
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class MenuTree extends TreeNode {
     private String icon;

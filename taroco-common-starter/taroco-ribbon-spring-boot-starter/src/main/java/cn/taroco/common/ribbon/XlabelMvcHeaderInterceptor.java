@@ -3,8 +3,7 @@ package cn.taroco.common.ribbon;
 import cn.taroco.common.constants.CommonConstant;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestVariableDefault;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -21,8 +20,8 @@ import java.util.List;
  *
  * @author liuht
  */
-public class XlabelHeaderInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(XlabelHeaderInterceptor.class);
+@Slf4j
+public class XlabelMvcHeaderInterceptor extends HandlerInterceptorAdapter {
 
     /**
      * 每个实例(服务)的路由信息存在注册中心的metadata中
@@ -33,15 +32,15 @@ public class XlabelHeaderInterceptor extends HandlerInterceptorAdapter {
 
 
     public static void initHystrixRequestContext(String labels) {
-        logger.info("label: " + labels);
+        log.debug("Init x-label: " + labels);
         if (!HystrixRequestContext.isCurrentThreadInitialized()) {
             HystrixRequestContext.initializeContext();
         }
 
         if (!StringUtils.isEmpty(labels)) {
-            XlabelHeaderInterceptor.LABEL.set(Arrays.asList(labels.split(CommonConstant.HEADER_LABEL_SPLIT)));
+            XlabelMvcHeaderInterceptor.LABEL.set(Arrays.asList(labels.split(CommonConstant.HEADER_LABEL_SPLIT)));
         } else {
-            XlabelHeaderInterceptor.LABEL.set(Collections.emptyList());
+            XlabelMvcHeaderInterceptor.LABEL.set(Collections.emptyList());
         }
     }
 
@@ -56,7 +55,9 @@ public class XlabelHeaderInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        XlabelHeaderInterceptor.initHystrixRequestContext(request.getHeader(CommonConstant.HEADER_LABEL));
+        final String labels = request.getHeader(CommonConstant.HEADER_LABEL);
+        XlabelMvcHeaderInterceptor.initHystrixRequestContext(labels);
+        log.debug("Pass x-label by spring mvc: " + labels);
         return true;
     }
 
@@ -66,6 +67,6 @@ public class XlabelHeaderInterceptor extends HandlerInterceptorAdapter {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        XlabelHeaderInterceptor.shutdownHystrixRequestContext();
+        XlabelMvcHeaderInterceptor.shutdownHystrixRequestContext();
     }
 }

@@ -10,8 +10,6 @@ import cn.taroco.rbac.admin.service.SysDictService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,7 +59,6 @@ public class DictController extends BaseController {
      * @return 同类型字典
      */
     @GetMapping("/type/{type}")
-    @Cacheable(value = "dict_details", key = "#type")
     public List<SysDict> findDictByType(@PathVariable String type) {
         SysDict condition = new SysDict();
         condition.setDelFlag(CommonConstant.STATUS_NORMAL);
@@ -76,7 +73,6 @@ public class DictController extends BaseController {
      * @return success、false
      */
     @PostMapping
-    @CacheEvict(value = "dict_details", key = "#sysDict.type")
     public Response dict(@RequestBody SysDict sysDict) {
         return Response.success(sysDictService.insert(sysDict));
     }
@@ -89,7 +85,6 @@ public class DictController extends BaseController {
      * @return R
      */
     @DeleteMapping("/{id}/{type}")
-    @CacheEvict(value = "dict_details", key = "#type")
     public Response deleteDict(@PathVariable Integer id, @PathVariable String type) {
         return Response.success(sysDictService.deleteById(id));
     }
@@ -101,7 +96,6 @@ public class DictController extends BaseController {
      * @return success/false
      */
     @PutMapping
-    @CacheEvict(value = "dict_details", key = "#sysDict.type")
     public Response editDict(@RequestBody SysDict sysDict) {
         return Response.success(sysDictService.updateById(sysDict));
     }

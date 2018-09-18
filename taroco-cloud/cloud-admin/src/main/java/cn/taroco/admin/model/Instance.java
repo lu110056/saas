@@ -1,6 +1,6 @@
 package cn.taroco.admin.model;
 
-import cn.taroco.common.utils.TarocoConstants;
+import cn.taroco.common.constants.CommonConstant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -50,10 +50,10 @@ public class Instance implements Serializable {
 
     private boolean isCoordinatingDiscoveryServer;
 
-    @JsonFormat(pattern = TarocoConstants.DATETIME_FORMAT, timezone = "GMT+8")
+    @JsonFormat(pattern = CommonConstant.DATETIME_FORMAT, timezone = "GMT+8")
     private Date lastUpdatedTime;
 
-    @JsonFormat(pattern = TarocoConstants.DATETIME_FORMAT, timezone = "GMT+8")
+    @JsonFormat(pattern = CommonConstant.DATETIME_FORMAT, timezone = "GMT+8")
     private Date lastDirtyTime;
 
     private String actionType;

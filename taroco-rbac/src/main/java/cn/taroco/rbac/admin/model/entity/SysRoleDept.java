@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
  * @author liuht
  * @since 2018-01-20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @TableName("sys_role_dept")
 public class SysRoleDept extends Model<SysRoleDept> {
