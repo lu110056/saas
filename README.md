@@ -31,7 +31,8 @@ Spring Cloud 本身已经封装得足够简单，也够丰富。也许正是因�
 * 基于 Hystrix 的聚合监控页面，包括单个服务和服务多个实例的监控。
 * 基于 Spring Security OAuth2 的权限认证系统。采用JWT RSA非对称加密的形式进行 token 加密解密。
 * 支持基于权重以及基于标签的服务路由，支持动态配置服务权重及标签信息。通过控制用户标签以及动态路由的配置，满足各种各样请求策略。
-* 基于角色的RBAC权限控制(用户、部门、角色、菜单、日志、字典、动态路由、oauth2 客户端)，并且支持数据权限控制。
+* 基于角色的RBAC权限控制(用户、部门、角色、菜单、日志、字典、动态路由、oauth2 客户端)，支持按钮级别的权限控制以及数据权限控制（DataScope）。
+* 基于Zipkin的调用链追踪（如果生产上使用，还需要把监控内容持久化比，如采用ElasticSearch，把监控内容从发送http请求切换到MQ等改造）。
 
 ### 整体架构
 
@@ -45,6 +46,7 @@ Spring Cloud 本身已经封装得足够简单，也够丰富。也许正是因�
 ![monitor](https://github.com/liuht777/Taroco/blob/master/taroco-docs/files/monitor.png)
 ![servers](https://github.com/liuht777/Taroco/blob/master/taroco-docs/files/servers.png)
 ![api](https://github.com/liuht777/Taroco/blob/master/taroco-docs/files/api.png)
+![zipkin](https://github.com/liuht777/Taroco/blob/master/taroco-docs/files/zipkin.png)
 
 ### 后端环境
 
