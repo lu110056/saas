@@ -9,16 +9,5 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <modules>
-        <module>demo-A</module>
-        <module>demo-B</module>
-    </modules>
     <artifactId>taroco-demo</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>cn.taroco</groupId>
-            <artifactId>taroco-log-spring-boot-starter</artifactId>
-        </dependency>
-    </dependencies>
 </project>
