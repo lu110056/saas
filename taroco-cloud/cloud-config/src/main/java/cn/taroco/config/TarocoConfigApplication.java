@@ -14,8 +14,8 @@ import org.springframework.cloud.config.server.EnableConfigServer;
 @SpringBootApplication
 @EnableConfigServer
 @EnableDiscoveryClient
-public class CloudConfigApplication {
+public class TarocoConfigApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CloudConfigApplication.class, args);
+        SpringApplication.run(TarocoConfigApplication.class, args);
     }
 }
