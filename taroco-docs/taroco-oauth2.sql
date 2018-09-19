@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-09-13 17:57:49
+Date: 2018-09-19 09:20:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,7 +28,7 @@ CREATE TABLE `sys_dept` (
   `del_flag` char(1) DEFAULT '0' COMMENT '是否删除  -1：已删除  0：正常',
   `parent_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`dept_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='部门管理';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='部门管理';
 
 -- ----------------------------
 -- Records of sys_dept
@@ -45,9 +45,9 @@ CREATE TABLE `sys_dept_relation` (
   `ancestor` int(11) NOT NULL COMMENT '祖先节点',
   `descendant` int(11) NOT NULL COMMENT '后代节点',
   PRIMARY KEY (`ancestor`,`descendant`),
-  KEY `idx1` (`ancestor`),
-  KEY `idx2` (`descendant`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+  KEY `idx1` (`ancestor`) USING BTREE,
+  KEY `idx2` (`descendant`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_dept_relation
@@ -75,10 +75,10 @@ CREATE TABLE `sys_dict` (
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
-  KEY `sys_dict_value` (`value`),
-  KEY `sys_dict_label` (`label`),
-  KEY `sys_dict_del_flag` (`del_flag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
+  KEY `sys_dict_value` (`value`) USING BTREE,
+  KEY `sys_dict_label` (`label`) USING BTREE,
+  KEY `sys_dict_del_flag` (`del_flag`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典表';
 
 -- ----------------------------
 -- Records of sys_dict
@@ -90,12 +90,12 @@ CREATE TABLE `sys_dict` (
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log` (
   `id` bigint(64) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `type` varchar(50) NOT NULL DEFAULT '1' COMMENT '日志类型',
+  `type` varchar(50) NOT NULL COMMENT '日志类型',
   `title` varchar(255) DEFAULT '' COMMENT '日志标题',
   `service_id` varchar(32) DEFAULT NULL COMMENT '服务ID',
   `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remote_addr` varchar(255) DEFAULT NULL COMMENT '操作IP地址',
   `user_agent` varchar(1000) DEFAULT NULL COMMENT '用户代理',
   `request_uri` varchar(255) DEFAULT NULL COMMENT '请求URI',
@@ -105,15 +105,69 @@ CREATE TABLE `sys_log` (
   `del_flag` char(1) DEFAULT '0' COMMENT '删除标记',
   `exception` text COMMENT '异常信息',
   PRIMARY KEY (`id`),
-  KEY `sys_log_create_by` (`create_by`),
-  KEY `sys_log_request_uri` (`request_uri`),
-  KEY `sys_log_type` (`type`),
-  KEY `sys_log_create_date` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='日志表';
+  KEY `sys_log_create_by` (`create_by`) USING BTREE,
+  KEY `sys_log_request_uri` (`request_uri`) USING BTREE,
+  KEY `sys_log_type` (`type`) USING BTREE,
+  KEY `sys_log_create_date` (`create_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COMMENT='日志表';
 
 -- ----------------------------
 -- Records of sys_log
 -- ----------------------------
+INSERT INTO `sys_log` VALUES ('1', 'Login', 'Login', null, 'admin', '2018-09-18 17:12:17', '2018-09-18 17:17:41', '127.0.0.1', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=57101537261906207&code=43(\"▔㉨▔)汗&grant_type=password&scope=server&username=admin', null, '1', null);
+INSERT INTO `sys_log` VALUES ('2', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:14:52', null, '127.0.0.1', null, '/admin/log/1', 'DELETE', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('3', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:16:36', '2018-09-18 17:17:14', '127.0.0.1', null, '/admin/log/1', 'DELETE', '', null, '1', null);
+INSERT INTO `sys_log` VALUES ('4', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:17:14', null, '127.0.0.1', null, '/admin/log/3', 'DELETE', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('5', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:17:41', null, '127.0.0.1', null, '/admin/log/1', 'DELETE', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('6', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:18:53', null, '127.0.0.1', null, '/admin/menu/', 'POST', '{\"name\":\"Zipkin\",\"menuId\":\"28\",\"parentId\":8,\"icon\":\"bar-chart-o\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('7', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:21:40', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":28,\"name\":\"Zipkin\",\"permission\":null,\"url\":null,\"method\":null,\"parentId\":8,\"icon\":\"bar-chart-o\",\"component\":\"views/service/swagger/index\",\"sort\":\"3\",\"type\":null,\"createTime\":1537262333000,\"updateTime\":null,\"delFlag\":\"0\",\"path\":\"zipkin\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('8', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:23:15', null, '127.0.0.1', null, '/admin/role/roleMenuUpd', 'PUT', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('9', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:23:21', null, '127.0.0.1', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('10', 'Login', 'Login', null, 'admin', '2018-09-18 17:23:29', null, '127.0.0.1', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=31371537262602806&code=g2ym&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('11', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:25:02', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":28,\"name\":\"Zipkin\",\"permission\":null,\"url\":null,\"method\":null,\"parentId\":8,\"icon\":\"bar-chart-o\",\"component\":\"views/service/zipkin/index\",\"sort\":3,\"type\":null,\"createTime\":1537262333000,\"updateTime\":1537262500000,\"delFlag\":\"0\",\"path\":\"zipkin\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('12', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:25:09', null, '127.0.0.1', null, '/admin/role/roleMenuUpd', 'PUT', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('13', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:25:14', null, '127.0.0.1', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('14', 'Login', 'Login', null, 'admin', '2018-09-18 17:25:20', null, '127.0.0.1', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=13031537262714812&code=45xg&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('15', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:30:50', null, '127.0.0.1', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('16', 'Login', 'Login', null, 'admin', '2018-09-18 17:30:57', null, '127.0.0.1', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=86771537263053080&code=a832&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('17', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:32:24', null, '127.0.0.1', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('18', 'Login', 'Login', null, 'admin', '2018-09-18 17:35:50', null, '127.0.0.1', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=13651537263145044&code=n7p6&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('19', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:36:18', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":28,\"name\":\"调用链监控\",\"permission\":null,\"url\":null,\"method\":null,\"parentId\":8,\"icon\":\"bar-chart-o\",\"component\":\"views/service/zipkin/index\",\"sort\":3,\"type\":null,\"createTime\":1537262333000,\"updateTime\":1537262500000,\"delFlag\":\"0\",\"path\":\"zipkin\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('20', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:37:08', null, '127.0.0.1', null, '/admin/menu/', 'POST', '{\"name\":\"删除服务\",\"menuId\":\"254\",\"parentId\":25,\"icon\":\"\",\"sort\":\"4\",\"type\":\"1\",\"method\":\"DELETE\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('21', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:37:31', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":253,\"name\":\"服务日志级别设置\",\"permission\":null,\"url\":\"/taroco-admin/api/applications/*/loggers/*\",\"method\":\"POST\",\"parentId\":25,\"icon\":null,\"component\":null,\"sort\":1,\"type\":\"1\",\"createTime\":1533863826000,\"updateTime\":null,\"delFlag\":\"0\",\"path\":null}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('22', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:37:37', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":251,\"name\":\"服务查询\",\"permission\":null,\"url\":\"/taroco-admin/api/**\",\"method\":\"GET\",\"parentId\":25,\"icon\":null,\"component\":null,\"sort\":1,\"type\":\"1\",\"createTime\":1533860750000,\"updateTime\":1533860765000,\"delFlag\":\"0\",\"path\":null}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('23', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:37:57', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":254,\"name\":\"删除服务\",\"permission\":null,\"url\":\"/taroco-admin/api/applications/*\",\"method\":\"DELETE\",\"parentId\":25,\"icon\":\"\",\"component\":null,\"sort\":4,\"type\":\"1\",\"createTime\":1537263428000,\"updateTime\":null,\"delFlag\":\"0\",\"path\":null}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('24', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:38:09', null, '127.0.0.1', null, '/admin/role/roleMenuUpd', 'PUT', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('25', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:38:35', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":28,\"name\":\"Zipkin\",\"permission\":null,\"url\":null,\"method\":null,\"parentId\":8,\"icon\":\"bar-chart-o\",\"component\":\"views/service/zipkin/index\",\"sort\":3,\"type\":\"0\",\"createTime\":1537262333000,\"updateTime\":1537262500000,\"delFlag\":\"0\",\"path\":\"zipkin\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('26', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:38:39', null, '127.0.0.1', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('27', 'Login', 'Login', null, 'admin', '2018-09-18 17:38:45', null, '127.0.0.1', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=57631537263519561&code=nmbb&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('28', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:39:20', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":28,\"name\":\"调用链监控\",\"permission\":null,\"url\":null,\"method\":null,\"parentId\":8,\"icon\":\"bar-chart-o\",\"component\":\"views/service/zipkin/index\",\"sort\":3,\"type\":\"0\",\"createTime\":1537262333000,\"updateTime\":1537262500000,\"delFlag\":\"0\",\"path\":\"zipkin\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('29', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:39:28', null, '127.0.0.1', null, '/admin/menu/', 'PUT', '{\"menuId\":28,\"name\":\"调用链监控\",\"permission\":null,\"url\":null,\"method\":null,\"parentId\":8,\"icon\":\"bar-chart-o\",\"component\":\"views/service/zipkin/index\",\"sort\":3,\"type\":\"0\",\"createTime\":1537262333000,\"updateTime\":1537262500000,\"delFlag\":\"0\",\"path\":\"zipkin\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('30', 'Operation', 'Operation', null, 'admin', '2018-09-18 17:39:33', null, '127.0.0.1', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('31', 'Login', 'Login', null, 'admin', '2018-09-18 17:39:41', null, '127.0.0.1', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=19601537263575182&code=6x5f&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('32', 'Login', 'Login', null, 'admin', '2018-09-18 20:11:03', null, '123.145.9.32', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=53001537272631549&code=DPYF&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('33', 'Login', 'Login', null, 'admin', '2018-09-18 20:11:12', null, '123.145.9.32', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=87081537272665707&code=a7cd&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('34', 'Login', 'Login', null, 'admin', '2018-09-18 20:36:17', null, '223.212.205.208', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=90791537273994653&code=b8mn&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('35', 'Login', 'Login', null, 'admin', '2018-09-18 20:36:27', null, '223.212.205.208', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=78531537274179695&code=mmyb&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('36', 'Operation', 'Operation', null, 'admin', '2018-09-18 20:36:43', null, '223.212.205.208', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('37', 'Login', 'Login', null, 'admin', '2018-09-18 20:38:28', null, '223.212.205.208', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=99941537274298602&code=g76c&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('38', 'Login', 'Login', null, 'admin', '2018-09-18 20:44:16', null, '27.10.126.112', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=84771537274793589&code=gw2y&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('39', 'Login', 'Login', null, 'admin', '2018-09-18 21:23:07', null, '223.212.205.208', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=53121537276971946&code=wcn3&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('40', 'Operation', 'Operation', null, 'admin', '2018-09-18 21:24:35', null, '223.212.205.208', null, '/admin/user/', 'POST', '{\"username\":\"terry\",\"password\":\"\",\"role\":[1],\"delFlag\":\"\",\"deptId\":10,\"phone\":\"13800008888\",\"newpassword1\":\"234567\",\"deptName\":\"顶级部门\",\"label\":\"\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('41', 'Operation', 'Operation', null, 'admin', '2018-09-18 21:24:42', null, '223.212.205.208', null, '/admin/user/', 'POST', '{\"username\":\"terry\",\"password\":\"\",\"role\":[1],\"delFlag\":\"\",\"deptId\":10,\"phone\":\"13800008888\",\"newpassword1\":\"234567\",\"deptName\":\"顶级部门\",\"label\":\"\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('42', 'Operation', 'Operation', null, 'admin', '2018-09-18 21:24:46', null, '223.212.205.208', null, '/admin/user/', 'POST', '{\"username\":\"terry\",\"password\":\"\",\"role\":[1],\"delFlag\":\"\",\"deptId\":10,\"phone\":\"13800008888\",\"newpassword1\":\"234567\",\"deptName\":\"顶级部门\",\"label\":\"\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('43', 'Login', 'Login', null, 'admin', '2018-09-18 22:50:42', null, '223.212.205.208', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=55861537282233533&code=243n&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('44', 'Login', 'Login', null, 'admin', '2018-09-19 08:14:11', null, '182.150.28.36', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=32411537316044072&code=p547&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('45', 'Login', 'Login', null, 'admin', '2018-09-19 08:28:53', null, '123.145.5.76', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=19791537316926130&code=n68y&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('46', 'Login', 'Login', null, 'admin', '2018-09-19 08:28:59', null, '123.145.5.76', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=34341537316935235&code=n7n6&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('47', 'Operation', 'Operation', null, 'admin', '2018-09-19 08:30:38', null, '182.150.28.36', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('48', 'Login', 'Login', null, 'admin', '2018-09-19 08:30:45', null, '182.150.28.36', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=63861537317037475&code=ypyd&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('49', 'Operation', 'Operation', null, 'admin', '2018-09-19 08:32:48', null, '182.150.28.36', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('50', 'Login', 'Login', null, 'admin', '2018-09-19 08:33:18', null, '182.150.28.36', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=29901537317166662&code=m6xp&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('51', 'Operation', 'Operation', null, 'admin', '2018-09-19 08:53:27', null, '123.145.5.76', null, '/admin/dict/', 'POST', '{\"value\":\"111\",\"label\":\"naame\",\"type\":\"type\",\"description\":\"123123\",\"sort\":\"1\",\"remarks\":\"aaaa\"}', null, '0', null);
+INSERT INTO `sys_log` VALUES ('52', 'Login', 'Login', null, 'admin', '2018-09-19 09:05:24', null, '182.150.28.36', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=76111537319095330&code=gnbn&grant_type=password&scope=server&username=admin', null, '0', null);
+INSERT INTO `sys_log` VALUES ('53', 'Operation', 'Operation', null, 'admin', '2018-09-19 09:15:24', null, '182.150.28.36', null, '/auth/authentication/removeToken', 'POST', '', null, '0', null);
+INSERT INTO `sys_log` VALUES ('54', 'Login', 'Login', null, 'admin', '2018-09-19 09:15:39', null, '182.150.28.36', null, '/auth/oauth/token', 'POST', 'password=******&randomStr=92331537319731694&code=bcd5&grant_type=password&scope=server&username=admin', null, '0', null);
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -135,7 +189,7 @@ CREATE TABLE `sys_menu` (
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '0--正常 1--删除',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='菜单权限表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单权限表';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -154,6 +208,7 @@ INSERT INTO `sys_menu` VALUES ('22', '用户新增', 'sys_user_add', null, '/adm
 INSERT INTO `sys_menu` VALUES ('23', '用户修改', 'sys_user_upd', null, '/admin/user/**', 'PUT', '2', null, null, null, '1', '2017-11-08 09:52:48', '2018-01-17 17:40:01', '0');
 INSERT INTO `sys_menu` VALUES ('24', '用户删除', 'sys_user_del', null, '/admin/user/*', 'DELETE', '2', null, null, null, '1', '2017-11-08 09:54:01', '2017-12-04 16:31:18', '0');
 INSERT INTO `sys_menu` VALUES ('25', '服务监控', null, 'service', null, null, '8', 'server', 'views/service/index', '1', '0', '2018-08-10 08:09:16', '2018-09-08 01:59:53', '0');
+INSERT INTO `sys_menu` VALUES ('28', '调用链监控', null, 'zipkin', null, null, '8', 'bar-chart-o', 'views/service/zipkin/index', '3', '0', '2018-09-18 17:18:53', '2018-09-18 17:21:40', '0');
 INSERT INTO `sys_menu` VALUES ('31', '菜单查看', null, null, '/admin/menu/**', 'GET', '3', null, null, null, '1', '2017-11-08 09:57:56', '2017-11-14 17:29:17', '0');
 INSERT INTO `sys_menu` VALUES ('32', '菜单新增', 'sys_menu_add', null, '/admin/menu/*', 'POST', '3', null, null, null, '1', '2017-11-08 10:15:53', '2018-01-20 14:37:50', '0');
 INSERT INTO `sys_menu` VALUES ('33', '菜单修改', 'sys_menu_edit', null, '/admin/menu/*', 'PUT', '3', null, null, null, '1', '2017-11-08 10:16:23', '2018-01-20 14:37:56', '0');
@@ -183,9 +238,10 @@ INSERT INTO `sys_menu` VALUES ('111', '路由查看', null, null, '/admin/route/
 INSERT INTO `sys_menu` VALUES ('112', '路由新增', 'sys_route_add', null, '/admin/route/**', 'POST', '110', null, null, null, '1', '2018-05-15 21:52:22', '2018-05-15 21:53:46', '0');
 INSERT INTO `sys_menu` VALUES ('113', '路由修改', 'sys_route_upd', null, '/admin/route/**', 'PUT', '110', null, null, null, '1', '2018-05-15 21:55:38', null, '0');
 INSERT INTO `sys_menu` VALUES ('114', '路由删除', 'sys_route_del', null, '/admin/route/**', 'DELETE', '110', null, null, null, '1', '2018-05-15 21:56:45', null, '0');
-INSERT INTO `sys_menu` VALUES ('251', '服务查询', null, null, '/taroco-admin/api/**', 'GET', '25', null, null, '1', null, '2018-08-10 08:25:50', '2018-08-10 08:26:05', '0');
+INSERT INTO `sys_menu` VALUES ('251', '服务查询', null, null, '/taroco-admin/api/**', 'GET', '25', null, null, '1', '1', '2018-08-10 08:25:50', '2018-08-10 08:26:05', '0');
 INSERT INTO `sys_menu` VALUES ('252', '设置权重和标签', 'taroco_admin_set_weight', null, '/taroco-registry/eureka/apps/**', 'PUT', '25', null, null, '2', '1', '2018-08-10 08:54:10', '2018-08-10 08:54:47', '0');
-INSERT INTO `sys_menu` VALUES ('253', '服务日志级别设置', null, null, '/taroco-admin/api/applications/*/loggers/*', 'POST', '25', null, null, '1', null, '2018-08-10 09:17:06', null, '0');
+INSERT INTO `sys_menu` VALUES ('253', '服务日志级别设置', null, null, '/taroco-admin/api/applications/*/loggers/*', 'POST', '25', null, null, '1', '1', '2018-08-10 09:17:06', '2018-09-18 17:37:31', '0');
+INSERT INTO `sys_menu` VALUES ('254', '删除服务', null, null, '/taroco-admin/api/applications/*', 'DELETE', '25', '', null, '4', '1', '2018-09-18 17:37:08', '2018-09-18 17:37:57', '0');
 
 -- ----------------------------
 -- Table structure for sys_oauth_client_details
@@ -226,8 +282,8 @@ CREATE TABLE `sys_role` (
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识（0-正常,1-删除）',
   PRIMARY KEY (`role_id`),
-  UNIQUE KEY `role_idx1_role_code` (`role_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
+  UNIQUE KEY `role_idx1_role_code` (`role_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Records of sys_role
@@ -244,7 +300,7 @@ CREATE TABLE `sys_role_dept` (
   `role_id` int(20) DEFAULT NULL COMMENT '角色ID',
   `dept_id` int(20) DEFAULT NULL COMMENT '部门ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色与部门对应关系';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='角色与部门对应关系';
 
 -- ----------------------------
 -- Records of sys_role_dept
@@ -260,7 +316,7 @@ CREATE TABLE `sys_role_menu` (
   `role_id` int(11) NOT NULL COMMENT '角色ID',
   `menu_id` int(11) NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`role_id`,`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色菜单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色菜单表';
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -279,6 +335,7 @@ INSERT INTO `sys_role_menu` VALUES ('1', '22');
 INSERT INTO `sys_role_menu` VALUES ('1', '23');
 INSERT INTO `sys_role_menu` VALUES ('1', '24');
 INSERT INTO `sys_role_menu` VALUES ('1', '25');
+INSERT INTO `sys_role_menu` VALUES ('1', '28');
 INSERT INTO `sys_role_menu` VALUES ('1', '31');
 INSERT INTO `sys_role_menu` VALUES ('1', '32');
 INSERT INTO `sys_role_menu` VALUES ('1', '33');
@@ -311,6 +368,7 @@ INSERT INTO `sys_role_menu` VALUES ('1', '114');
 INSERT INTO `sys_role_menu` VALUES ('1', '251');
 INSERT INTO `sys_role_menu` VALUES ('1', '252');
 INSERT INTO `sys_role_menu` VALUES ('1', '253');
+INSERT INTO `sys_role_menu` VALUES ('1', '254');
 INSERT INTO `sys_role_menu` VALUES ('14', '1');
 INSERT INTO `sys_role_menu` VALUES ('14', '2');
 INSERT INTO `sys_role_menu` VALUES ('14', '3');
@@ -344,9 +402,9 @@ CREATE TABLE `sys_user` (
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '0-正常，1-删除',
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `user_idx1_username` (`username`),
-  UNIQUE KEY `user_idx2_phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='用户表';
+  UNIQUE KEY `user_idx1_username` (`username`) USING BTREE,
+  UNIQUE KEY `user_idx2_phone` (`phone`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -361,7 +419,7 @@ CREATE TABLE `sys_user_role` (
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `role_id` int(11) NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`user_id`,`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户角色表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
 
 -- ----------------------------
 -- Records of sys_user_role
