@@ -11,9 +11,9 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  */
 @EnableEurekaServer
 @SpringBootApplication
-public class CloudRegistryApplication {
+public class TarocoRegistryApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CloudRegistryApplication.class, args);
+		SpringApplication.run(TarocoRegistryApplication.class, args);
 	}
 }
