@@ -1,6 +1,7 @@
 package cn.taroco.common.bean.interceptor;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * 数据权限、参考guns实现
  * 2018年02月12日  增强查询参数
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class DataScope extends HashMap {
     /**

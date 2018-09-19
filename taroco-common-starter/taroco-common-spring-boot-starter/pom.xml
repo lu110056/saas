@@ -16,10 +16,10 @@
             <groupId>cn.taroco</groupId>
             <artifactId>taroco-log-spring-boot-starter</artifactId>
         </dependency>
-        <!--添加spring对cache的支持-->
+        <!-- guava -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
         <!--配置属性加密工具-->
         <dependency>
@@ -35,11 +35,6 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -84,6 +79,12 @@
                     <groupId>commons-io</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- spring-boot-starter-web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

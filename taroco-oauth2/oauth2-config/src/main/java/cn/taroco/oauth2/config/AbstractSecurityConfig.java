@@ -3,6 +3,7 @@ package cn.taroco.oauth2.config;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct;
  */
 @EnableWebSecurity
 public class AbstractSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
 
@@ -37,8 +39,22 @@ public class AbstractSecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
+    /**
+     * 加密器 spring boot 2.x没有默认的加密器了
+     *
+     * @return PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * 这一步的配置是必不可少的，否则SpringBoot会自动配置一个AuthenticationManager,覆盖掉内存中的用户
+     */
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

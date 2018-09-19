@@ -3,7 +3,7 @@ package cn.taroco.oauth2.server.feign;
 import cn.taroco.common.constants.ServiceNameConstants;
 import cn.taroco.common.vo.UserVO;
 import cn.taroco.oauth2.server.feign.fallback.UserServiceFallbackImpl;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 

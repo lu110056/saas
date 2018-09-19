@@ -8,7 +8,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -17,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Base64;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -68,7 +68,7 @@ public class ResJwtTokenStore {
         final String username = this.resource.getClientId();
         final String password = this.resource.getClientSecret();
         if (username != null && password != null) {
-            byte[] token = Base64.encode((username + ":" + password).getBytes());
+            final byte[] token = Base64.getEncoder().encode((username + ":" + password).getBytes());
             headers.add("Authorization", "Basic " + new String(token));
         }
         final HttpEntity<Void> request = new HttpEntity<>(headers);
