@@ -11,7 +11,14 @@ base:
     port: 6379
     password: taroco!@#$
   zipkin:
-    url: http://localhost:10002
+    url: http://172.27.0.11:10002
+
+spring:
+  zipkin:
+    base-url: ${base.zipkin.url}
+  sleuth:
+    sampler:
+      percentage: 1.0
 
 server:
   tomcat:

@@ -13,6 +13,13 @@ base:
   zipkin:
     url: http://localhost:10002
 
+spring:
+  zipkin:
+    base-url: ${base.zipkin.url}
+  sleuth:
+    sampler:
+      percentage: 1.0
+
 server:
   tomcat:
     max-threads: 200 # Maximum amount of worker threads.
