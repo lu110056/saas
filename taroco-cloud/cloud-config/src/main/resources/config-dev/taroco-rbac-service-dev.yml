@@ -3,18 +3,14 @@
 # jpa配置 数据源配置
 spring:
   datasource:
-    url: ${base.mysql.url}/taroco-oauth2
+    url: ${base.mysql.url}/taroco-oauth2?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-    # 下面为连接池的补充设置，应用到上面所有数据源中
-    # 初始化大小，最小，最大
-    initialSize: 1
-    minIdle: 3
-    maxActive: 20
-    # 配置获取连接等待超时的时间
-    maxWait: 60000
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      pool-name: Taroco-OAuth2-HikariCP
   #redis配置
   redis:
     host: ${base.redis.host}

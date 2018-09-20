@@ -33,6 +33,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+		<!-- jdbc -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
 		<!--MySQL-->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -48,11 +53,6 @@
 					<artifactId>tomcat-jdbc</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<!-- druid连接池 -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
 		</dependency>
         <!--mybatis-plus-->
         <dependency>

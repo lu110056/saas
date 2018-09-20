@@ -12,8 +12,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 @SpringBootApplication
 @EnableDiscoveryClient
-public class RbacAdminApplication {
+public class TarocoRbacApplication {
     public static void main(String[] args) {
-        SpringApplication.run(RbacAdminApplication.class, args);
+        SpringApplication.run(TarocoRbacApplication.class, args);
     }
 }

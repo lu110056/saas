@@ -8,8 +8,8 @@ import cn.taroco.rbac.admin.service.SysZuulRouteService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerInitializedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -22,7 +22,8 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class RouteConfigInitListener {
+public class RouteConfigInitListener implements ApplicationListener<ApplicationStartedEvent> {
+
     @Autowired
     private TarocoRedisRepository redisRepository;
 
@@ -33,8 +34,8 @@ public class RouteConfigInitListener {
      * Callback used to run the bean.
      * 初始化路由配置的数据，避免gateway 依赖业务模块
      */
-    @EventListener(value = {EmbeddedServletContainerInitializedEvent.class})
-    public void init() {
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
         log.info("开始初始化路由配置数据");
         EntityWrapper<SysZuulRoute> wrapper = new EntityWrapper<>();
         wrapper.eq(CommonConstant.DEL_FLAG, CommonConstant.STATUS_NORMAL);
