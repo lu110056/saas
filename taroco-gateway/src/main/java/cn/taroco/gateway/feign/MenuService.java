@@ -3,7 +3,7 @@ package cn.taroco.gateway.feign;
 import cn.taroco.common.constants.ServiceNameConstants;
 import cn.taroco.common.vo.MenuVO;
 import cn.taroco.gateway.feign.fallback.MenuServiceFallbackImpl;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
