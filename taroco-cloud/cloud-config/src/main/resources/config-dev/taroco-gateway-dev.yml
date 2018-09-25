@@ -30,6 +30,7 @@ security:
 
 ignore:
   urls:
+    - /actuator/**
     - /mobile/**
     - /auth/**
     - /admin/code/*

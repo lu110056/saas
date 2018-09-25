@@ -13,6 +13,15 @@ base:
   zipkin:
     url: http://localhost:10002
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
 spring:
   zipkin:
     base-url: ${base.zipkin.url}
