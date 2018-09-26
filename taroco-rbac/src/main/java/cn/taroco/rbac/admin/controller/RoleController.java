@@ -20,6 +20,7 @@ import java.util.Map;
  * @author liuht
  * @date 2017/11/5
  */
+@SuppressWarnings("unchecked")
 @RestController
 @RequestMapping("/role")
 public class RoleController extends BaseController {
@@ -94,12 +95,12 @@ public class RoleController extends BaseController {
     /**
      * 更新角色菜单
      *
-     * @param roleId  角色ID
-     * @param menuIds 菜单结合
      * @return success、false
      */
     @PutMapping("/roleMenuUpd")
-    public Response roleMenuUpd(Integer roleId, @RequestParam("menuIds[]") Integer[] menuIds) {
+    public Response roleMenuUpd(@RequestBody Map data) {
+        final Integer roleId = Integer.valueOf(data.get("roleId") + "");
+        final List<Integer> menuIds = (List<Integer>) data.get("menuIds");
         SysRole sysRole = sysRoleService.selectById(roleId);
         return Response.success(sysRoleMenuService.insertRoleMenus(sysRole.getRoleCode(), roleId, menuIds));
     }

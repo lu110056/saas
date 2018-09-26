@@ -2,13 +2,13 @@ package cn.taroco.rbac.admin.service.impl;
 
 import cn.taroco.rbac.admin.mapper.SysRoleMenuMapper;
 import cn.taroco.rbac.admin.model.entity.SysRoleMenu;
+import cn.taroco.rbac.admin.service.SysRoleMenuService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import cn.taroco.rbac.admin.service.SysRoleMenuService;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,8 +22,7 @@ import java.util.List;
 @Service
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
     @Override
-    @CacheEvict(value = "menu_details", key = "#role + '_menu'")
-    public Boolean insertRoleMenus(String role, Integer roleId, Integer[] menuIds) {
+    public Boolean insertRoleMenus(String role, Integer roleId, Collection<Integer> menuIds) {
         SysRoleMenu condition = new SysRoleMenu();
         condition.setRoleId(roleId);
         this.delete(new EntityWrapper<>(condition));
