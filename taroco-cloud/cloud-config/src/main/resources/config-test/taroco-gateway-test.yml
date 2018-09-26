@@ -12,10 +12,11 @@ zuul:
   retryable: true
   #　忽略所有默认路由
   ignored-services: '*'
+  # 需要聚合的swagger服务
+  swagger:
+    serviceIds: taroco-rbac-service
 
 security:
-  encode:
-    key: '1234567887654321' #必须16位
   validate:
     code: true
     preview: true
