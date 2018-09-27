@@ -34,7 +34,7 @@ public class DynamicRouteConfiguration {
     @Bean
     public DiscoveryClientRouteLocator dynamicRouteLocator() {
         return new DynamicRouteLocator(
-                server.getServletPrefix()
+                server.getServlet().getPath()
                 , discovery
                 , zuulProperties
                 , registration

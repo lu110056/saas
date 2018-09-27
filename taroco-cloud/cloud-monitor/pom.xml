@@ -5,7 +5,7 @@
     <parent>
         <artifactId>taroco-cloud</artifactId>
         <groupId>cn.taroco</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>2.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
@@ -26,20 +26,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-turbine</artifactId>
+            <artifactId>spring-cloud-starter-netflix-turbine</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
-        </dependency>
-        <!-- zipkin -->
-        <dependency>
-            <groupId>io.zipkin.java</groupId>
-            <artifactId>zipkin-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.zipkin.java</groupId>
-            <artifactId>zipkin-autoconfigure-ui</artifactId>
+            <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
         </dependency>
     </dependencies>
 
@@ -49,6 +40,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

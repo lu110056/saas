@@ -1,6 +1,5 @@
 package cn.taroco.gateway.fallback;
 
-import cn.taroco.common.constants.ServiceNameConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.route.FallbackProvider;
 import org.springframework.http.HttpHeaders;
@@ -10,49 +9,56 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
  * @author liuht
  * @date 2018/1/25
- * Rbac 模块异常回调
+ * Auth 模块异常回调
  */
 @Slf4j
 @Component
-public class RbacFallbackProvider implements FallbackProvider {
-
-    private static final String RBAC_SERVICE_DISABLE = "权限管理模块不可用";
+public class CommonFallbackProvider implements FallbackProvider {
 
     @Override
-    public ClientHttpResponse fallbackResponse(Throwable cause) {
+    public String getRoute() {
+        return "*";
+    }
+
+    @Override
+    public ClientHttpResponse fallbackResponse(String route, Throwable cause) {
         return new ClientHttpResponse() {
             @Override
-            public HttpStatus getStatusCode() {
+            public HttpStatus getStatusCode() throws IOException {
                 return HttpStatus.SERVICE_UNAVAILABLE;
             }
 
             @Override
-            public int getRawStatusCode() {
+            public int getRawStatusCode() throws IOException {
                 return HttpStatus.SERVICE_UNAVAILABLE.value();
             }
 
             @Override
-            public String getStatusText() {
+            public String getStatusText() throws IOException {
                 return HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase();
             }
 
             @Override
             public void close() {
+
             }
 
             @Override
-            public InputStream getBody() {
+            public InputStream getBody() throws IOException {
                 if (cause != null && cause.getMessage() != null) {
-                    log.error("调用:{} 异常：{}", getRoute(), cause.getMessage());
+                    log.error("服务:{} 异常：{}", route, cause.getMessage());
                     return new ByteArrayInputStream(cause.getMessage().getBytes());
                 } else {
-                    log.error("调用:{} 异常：{}", getRoute(), RBAC_SERVICE_DISABLE);
-                    return new ByteArrayInputStream(RBAC_SERVICE_DISABLE.getBytes());
+                    log.error("服务:{} 异常：{}", route, "暂不可用, 请稍候再试");
+                    return new ByteArrayInputStream(("service:" + route + " not available, please try again later")
+                            .getBytes
+                            ());
                 }
             }
 
@@ -63,15 +69,5 @@ public class RbacFallbackProvider implements FallbackProvider {
                 return headers;
             }
         };
-    }
-
-    @Override
-    public String getRoute() {
-        return ServiceNameConstants.RBAC_SERVICE;
-    }
-
-    @Override
-    public ClientHttpResponse fallbackResponse() {
-        return fallbackResponse(null);
     }
 }

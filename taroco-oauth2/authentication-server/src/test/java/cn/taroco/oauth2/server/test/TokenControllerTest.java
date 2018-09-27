@@ -1,6 +1,6 @@
 package cn.taroco.oauth2.server.test;
 
-import cn.taroco.oauth2.server.AuthenticationServerApplication;
+import cn.taroco.oauth2.server.TarocoOauth2ServerApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
  */
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AuthenticationServerApplication.class)
+@SpringBootTest(classes = TarocoOauth2ServerApplication.class)
 @AutoConfigureMockMvc
 public class TokenControllerTest {
 

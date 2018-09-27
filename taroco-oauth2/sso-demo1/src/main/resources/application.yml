@@ -14,8 +14,6 @@ oauth2:
   server: http://127.0.0.1:9001
 
 security:
-  basic:
-    enabled: false
   oauth2:
     client:
       client-id: sso-demo1

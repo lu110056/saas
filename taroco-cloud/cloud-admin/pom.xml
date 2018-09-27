@@ -5,7 +5,7 @@
     <parent>
         <artifactId>taroco-cloud</artifactId>
         <groupId>cn.taroco</groupId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>2.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
@@ -24,10 +24,9 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- zuul单独使用 -->
         <dependency>
-            <groupId>com.netflix.zuul</groupId>
-            <artifactId>zuul-core</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
     </dependencies>
 

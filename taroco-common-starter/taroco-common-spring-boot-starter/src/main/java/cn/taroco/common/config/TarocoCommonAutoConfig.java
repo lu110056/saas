@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2017/8/25
  */
 @Configuration
-public class TarocoCommonAutoConfig extends WebMvcConfigurerAdapter {
+public class TarocoCommonAutoConfig implements WebMvcConfigurer {
 
     /**
      * Token参数解析
@@ -44,7 +44,7 @@ public class TarocoCommonAutoConfig extends WebMvcConfigurerAdapter {
     @Bean
     @ConditionalOnClass(RequestPerformanceFilter.class)
     public FilterRegistrationBean filterRegistrationBean(){
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        FilterRegistrationBean<RequestPerformanceFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         RequestPerformanceFilter filter = new RequestPerformanceFilter();
         filterRegistrationBean.setFilter(filter);
         filterRegistrationBean.setEnabled(true);

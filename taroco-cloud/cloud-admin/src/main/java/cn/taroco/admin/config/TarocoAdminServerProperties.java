@@ -123,7 +123,8 @@ public class TarocoAdminServerProperties {
         /**
          * Endpoints to be proxified by spring boot admin.
          */
-        private String[] endpoints = {"env", "metrics", "trace", "dump", "jolokia", "info", "logfile", "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents", "mappings"};
+        private String[] endpoints = {"env", "metrics", "httptrace", "dump", "jolokia", "info", "heath", "logfile",
+                "refresh", "flyway", "liquibase", "heapdump", "loggers", "auditevents", "mappings"};
 
         public String[] getEndpoints() {
             return endpoints;

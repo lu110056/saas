@@ -3,11 +3,12 @@ package cn.taroco.rbac.admin.controller;
 import cn.taroco.common.utils.Query;
 import cn.taroco.common.web.BaseController;
 import cn.taroco.common.web.Response;
-import cn.taroco.rbac.admin.service.SysOauthClientDetailsService;
 import cn.taroco.rbac.admin.model.entity.SysOauthClientDetails;
+import cn.taroco.rbac.admin.service.SysOauthClientDetailsService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,11 @@ import java.util.Map;
 @RestController
 @RequestMapping("/client")
 public class OauthClientDetailsController extends BaseController {
+
     @Autowired
     private SysOauthClientDetailsService sysOauthClientDetailsService;
+
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     /**
      * 通过ID查询
@@ -53,15 +57,17 @@ public class OauthClientDetailsController extends BaseController {
     /**
      * 添加
      *
-     * @param sysOauthClientDetails 实体
+     * @param client 实体
      * @return success/false
      */
     @PostMapping
-    public Response add(@RequestBody SysOauthClientDetails sysOauthClientDetails) {
-        if (StringUtils.isEmpty(sysOauthClientDetails.getAdditionalInformation())) {
-            sysOauthClientDetails.setAdditionalInformation(null);
+    public Response add(@RequestBody SysOauthClientDetails client) {
+        if (StringUtils.isEmpty(client.getAdditionalInformation())) {
+            client.setAdditionalInformation(null);
         }
-        return Response.success(sysOauthClientDetailsService.insert(sysOauthClientDetails));
+        final String secret = encoder.encode(client.getClientId() + ":" + client.getClientSecret());
+        client.setClientSecret(secret);
+        return Response.success(sysOauthClientDetailsService.insert(client));
     }
 
     /**
@@ -80,11 +86,16 @@ public class OauthClientDetailsController extends BaseController {
     /**
      * 编辑
      *
-     * @param sysOauthClientDetails 实体
+     * @param client 实体
      * @return success/false
      */
     @PutMapping
-    public Response edit(@RequestBody SysOauthClientDetails sysOauthClientDetails) {
-        return Response.success(sysOauthClientDetailsService.updateById(sysOauthClientDetails));
+    public Response edit(@RequestBody SysOauthClientDetails client) {
+        final String pass = client.getClientId() + ":" + client.getClientSecret();
+        final SysOauthClientDetails details = sysOauthClientDetailsService.selectById(client.getClientId());
+        if (encoder.matches(pass, details.getClientSecret())) {
+            client.setClientSecret(encoder.encode(pass));
+        }
+        return Response.success(sysOauthClientDetailsService.updateById(client));
     }
 }

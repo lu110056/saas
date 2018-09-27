@@ -5,7 +5,7 @@ import cn.taroco.admin.event.ClientApplicationRegisteredEvent;
 import cn.taroco.admin.model.Application;
 import cn.taroco.admin.model.Instance;
 import cn.taroco.admin.model.StatusInfo;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author liuht
  */
-@Log4j
+@Slf4j
 public class SimpleApplicationStore implements ApplicationStore, ApplicationEventPublisherAware {
 
     private ApplicationEventPublisher publisher;

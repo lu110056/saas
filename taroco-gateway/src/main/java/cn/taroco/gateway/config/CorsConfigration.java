@@ -33,7 +33,7 @@ public class CorsConfigration {
      */
     @Bean
     public FilterRegistrationBean someFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
+        FilterRegistrationBean<CorsFilter> registration = new FilterRegistrationBean<>();
         registration.setFilter(corsFilter());
         registration.addUrlPatterns("/*");
         registration.setName("corsFilter");

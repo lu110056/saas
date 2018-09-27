@@ -22,8 +22,8 @@ import cn.taroco.admin.zuul.ApplicationRouteLocator;
 import cn.taroco.admin.zuul.filters.pre.ApplicationHeadersFilter;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.endpoint.Endpoint;
-import org.springframework.boot.actuate.trace.TraceRepository;
+import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
+import org.springframework.boot.actuate.trace.http.HttpTraceRepository;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -58,19 +58,19 @@ import org.springframework.core.annotation.Order;
 @Import(HttpClientConfiguration.class)
 public class TarocoRevereseZuulProxyConfiguration extends ZuulServerAutoConfiguration {
 
-    @Autowired(required = false)
-    private TraceRepository traces;
-
     @Autowired
     private ApplicationRegistry registry;
 
     @Autowired
     private TarocoAdminServerProperties adminServer;
 
+    @Autowired
+    private HttpTraceRepository traceRepository;
+
     @Bean
     @Order(0)
     public ApplicationRouteLocator applicationRouteLocator() {
-        ApplicationRouteLocator routeLocator = new ApplicationRouteLocator(this.server.getServletPrefix(), registry,
+        ApplicationRouteLocator routeLocator = new ApplicationRouteLocator(this.server.getServlet().getPath(), registry,
                 adminServer.getContextPath() + "/api/applications/");
         routeLocator.setEndpoints(adminServer.getRoutes().getEndpoints());
         return routeLocator;
@@ -79,9 +79,7 @@ public class TarocoRevereseZuulProxyConfiguration extends ZuulServerAutoConfigur
     @Bean
     public ProxyRequestHelper proxyRequestHelper() {
         TraceProxyRequestHelper helper = new TraceProxyRequestHelper();
-        if (this.traces != null) {
-            helper.setTraces(this.traces);
-        }
+        helper.setTraces(traceRepository);
         helper.setIgnoredHeaders(this.zuulProperties.getIgnoredHeaders());
         helper.setTraceRequestBody(this.zuulProperties.isTraceRequestBody());
         return helper;
@@ -92,7 +90,7 @@ public class TarocoRevereseZuulProxyConfiguration extends ZuulServerAutoConfigur
      */
     @Bean
     public PreDecorationFilter preDecorationFilter(RouteLocator routeLocator) {
-        return new PreDecorationFilter(routeLocator, this.server.getServletPrefix(), zuulProperties,
+        return new PreDecorationFilter(routeLocator, this.server.getServlet().getPath(), zuulProperties,
                 proxyRequestHelper());
     }
 

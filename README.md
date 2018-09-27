@@ -34,6 +34,12 @@ Spring Cloud 本身已经封装得足够简单，也够丰富。也许正是因�
 * 基于角色的RBAC权限控制(用户、部门、角色、菜单、日志、字典、动态路由、oauth2 客户端)，支持按钮级别的权限控制以及数据权限控制（DataScope）。
 * 基于Zipkin的调用链追踪（如果生产上使用，还需要把监控内容持久化比，如采用ElasticSearch，把监控内容从发送http请求切换到MQ等改造）。
 
+### 分支版本
+
+* Branch 1.5.12：基于 Spring Boot 1.5.12.RELEASE + Spring Cloud Edgware.SR4，是Taroco最初的版本。
+* Branch 2.x：基于 Spring Boot 2.0.5.RELEASE + Spring Cloud Finchley.SR1 是当前维护的版本。
+* Master 分支已经改为从2.x merge代码，今后更新的中心也会放在2.x分支上。
+
 ### 整体架构
 
 ![架构图](https://github.com/liuht777/Taroco/blob/master/taroco-docs/files/taroco%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg)

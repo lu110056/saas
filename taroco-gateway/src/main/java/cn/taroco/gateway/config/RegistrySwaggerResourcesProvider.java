@@ -1,7 +1,6 @@
 package cn.taroco.gateway.config;
 
-import cn.taroco.common.constants.ServiceNameConstants;
-import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.zuul.filters.Route;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Primary;
@@ -20,6 +19,10 @@ import java.util.List;
 @Component
 @Primary
 public class RegistrySwaggerResourcesProvider implements SwaggerResourcesProvider {
+
+    @Value("#{'${zuul.swagger.serviceIds}'.split(',')}")
+    private List<String> serviceIds;
+
     private final RouteLocator routeLocator;
 
     public RegistrySwaggerResourcesProvider(RouteLocator routeLocator) {
@@ -32,8 +35,7 @@ public class RegistrySwaggerResourcesProvider implements SwaggerResourcesProvide
 
         List<Route> routes = routeLocator.getRoutes();
         routes.forEach(route -> {
-            //授权不维护到swagger
-            if (!StringUtils.contains(route.getId(), ServiceNameConstants.AUTH_SERVICE)){
+            if (serviceIds.contains(route.getId().toLowerCase())) {
                 resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "v2/api-docs")));
             }
         });

@@ -3,7 +3,7 @@ package cn.taroco.gateway.feign;
 import cn.taroco.common.constants.ServiceNameConstants;
 import cn.taroco.common.entity.SysLog;
 import cn.taroco.gateway.feign.fallback.SysLogServiceFallbackImpl;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

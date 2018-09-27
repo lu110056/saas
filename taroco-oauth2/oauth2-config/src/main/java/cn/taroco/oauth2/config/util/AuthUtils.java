@@ -5,10 +5,10 @@ import cn.taroco.common.exception.ClientException;
 import cn.taroco.common.exception.DefaultError;
 import cn.taroco.common.exception.ServerException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.codec.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Base64;
 
 /**
  * @author liuht
@@ -32,7 +32,7 @@ public class AuthUtils {
         byte[] base64Token = header.substring(6).getBytes("UTF-8");
         byte[] decoded;
         try {
-            decoded = Base64.decode(base64Token);
+            decoded = Base64.getDecoder().decode(base64Token);
         } catch (IllegalArgumentException e) {
             throw new ServerException(
                     "Failed to decode basic authentication token",
