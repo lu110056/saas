@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2018-09-26 15:32:09
+Date: 2018-09-27 17:22:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,7 +28,7 @@ CREATE TABLE `sys_dept` (
   `del_flag` char(1) DEFAULT '0' COMMENT '是否删除  -1：已删除  0：正常',
   `parent_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`dept_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='部门管理';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='部门管理';
 
 -- ----------------------------
 -- Records of sys_dept
@@ -45,9 +45,9 @@ CREATE TABLE `sys_dept_relation` (
   `ancestor` int(11) NOT NULL COMMENT '祖先节点',
   `descendant` int(11) NOT NULL COMMENT '后代节点',
   PRIMARY KEY (`ancestor`,`descendant`),
-  KEY `idx1` (`ancestor`),
-  KEY `idx2` (`descendant`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+  KEY `idx1` (`ancestor`) USING BTREE,
+  KEY `idx2` (`descendant`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of sys_dept_relation
@@ -75,10 +75,10 @@ CREATE TABLE `sys_dict` (
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   `del_flag` char(1) NOT NULL DEFAULT '0' COMMENT '删除标记',
   PRIMARY KEY (`id`),
-  KEY `sys_dict_value` (`value`),
-  KEY `sys_dict_label` (`label`),
-  KEY `sys_dict_del_flag` (`del_flag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
+  KEY `sys_dict_value` (`value`) USING BTREE,
+  KEY `sys_dict_label` (`label`) USING BTREE,
+  KEY `sys_dict_del_flag` (`del_flag`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='字典表';
 
 -- ----------------------------
 -- Records of sys_dict
@@ -95,7 +95,7 @@ CREATE TABLE `sys_log` (
   `service_id` varchar(32) DEFAULT NULL COMMENT '服务ID',
   `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remote_addr` varchar(255) DEFAULT NULL COMMENT '操作IP地址',
   `user_agent` varchar(1000) DEFAULT NULL COMMENT '用户代理',
   `request_uri` varchar(255) DEFAULT NULL COMMENT '请求URI',
@@ -105,11 +105,11 @@ CREATE TABLE `sys_log` (
   `del_flag` char(1) DEFAULT '0' COMMENT '删除标记',
   `exception` text COMMENT '异常信息',
   PRIMARY KEY (`id`),
-  KEY `sys_log_create_by` (`create_by`),
-  KEY `sys_log_request_uri` (`request_uri`),
-  KEY `sys_log_type` (`type`),
-  KEY `sys_log_create_date` (`create_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='日志表';
+  KEY `sys_log_create_by` (`create_by`) USING BTREE,
+  KEY `sys_log_request_uri` (`request_uri`) USING BTREE,
+  KEY `sys_log_type` (`type`) USING BTREE,
+  KEY `sys_log_create_date` (`create_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='日志表';
 
 -- ----------------------------
 -- Records of sys_log
@@ -135,7 +135,7 @@ CREATE TABLE `sys_menu` (
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `del_flag` char(1) DEFAULT '0' COMMENT '0--正常 1--删除',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='菜单权限表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单权限表';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -153,8 +153,7 @@ INSERT INTO `sys_menu` VALUES ('21', '用户查看', '', null, '/admin/user/**',
 INSERT INTO `sys_menu` VALUES ('22', '用户新增', 'sys_user_add', null, '/admin/user/*', 'POST', '2', null, null, null, '1', '2017-11-08 09:52:09', '2017-12-04 16:31:10', '0');
 INSERT INTO `sys_menu` VALUES ('23', '用户修改', 'sys_user_upd', null, '/admin/user/**', 'PUT', '2', null, null, null, '1', '2017-11-08 09:52:48', '2018-01-17 17:40:01', '0');
 INSERT INTO `sys_menu` VALUES ('24', '用户删除', 'sys_user_del', null, '/admin/user/*', 'DELETE', '2', null, null, null, '1', '2017-11-08 09:54:01', '2017-12-04 16:31:18', '0');
-INSERT INTO `sys_menu` VALUES ('25', '服务监控', null, 'service', null, null, '8', 'server', 'views/service/admin/index', '1', '0', '2018-08-10 08:09:16', '2018-09-08 01:59:53', '0');
-INSERT INTO `sys_menu` VALUES ('26', 'Turbine监控', null, 'turbine', null, null, '8', 'bar-chart-o', 'views/service/turbine/index', '4', '0', '2018-09-26 11:53:37', '2018-09-26 11:53:56', '0');
+INSERT INTO `sys_menu` VALUES ('25', '服务监控', null, 'service', null, null, '8', 'server', 'views/service/index', '1', '0', '2018-08-10 08:09:16', '2018-09-08 01:59:53', '0');
 INSERT INTO `sys_menu` VALUES ('28', '调用链监控', null, 'zipkin', null, null, '8', 'bar-chart-o', 'views/service/zipkin/index', '3', '0', '2018-09-18 17:18:53', '2018-09-18 17:21:40', '0');
 INSERT INTO `sys_menu` VALUES ('31', '菜单查看', null, null, '/admin/menu/**', 'GET', '3', null, null, null, '1', '2017-11-08 09:57:56', '2017-11-14 17:29:17', '0');
 INSERT INTO `sys_menu` VALUES ('32', '菜单新增', 'sys_menu_add', null, '/admin/menu/*', 'POST', '3', null, null, null, '1', '2017-11-08 10:15:53', '2018-01-20 14:37:50', '0');
@@ -185,10 +184,10 @@ INSERT INTO `sys_menu` VALUES ('111', '路由查看', null, null, '/admin/route/
 INSERT INTO `sys_menu` VALUES ('112', '路由新增', 'sys_route_add', null, '/admin/route/**', 'POST', '110', null, null, null, '1', '2018-05-15 21:52:22', '2018-05-15 21:53:46', '0');
 INSERT INTO `sys_menu` VALUES ('113', '路由修改', 'sys_route_upd', null, '/admin/route/**', 'PUT', '110', null, null, null, '1', '2018-05-15 21:55:38', null, '0');
 INSERT INTO `sys_menu` VALUES ('114', '路由删除', 'sys_route_del', null, '/admin/route/**', 'DELETE', '110', null, null, null, '1', '2018-05-15 21:56:45', null, '0');
-INSERT INTO `sys_menu` VALUES ('251', '服务查询', null, null, '/taroco-admin/api/**', 'GET', '25', null, null, '1', '1', '2018-08-10 08:25:50', '2018-09-26 11:35:43', '1');
-INSERT INTO `sys_menu` VALUES ('252', '设置权重和标签', 'taroco_admin_set_weight', null, '/taroco-registry/eureka/apps/**', 'PUT', '25', null, null, '2', '1', '2018-08-10 08:54:10', '2018-09-26 11:35:46', '1');
-INSERT INTO `sys_menu` VALUES ('253', '服务日志级别设置', null, null, '/taroco-admin/api/applications/*/loggers/*', 'POST', '25', null, null, '1', '1', '2018-08-10 09:17:06', '2018-09-26 11:35:48', '1');
-INSERT INTO `sys_menu` VALUES ('254', '删除服务', null, null, '/taroco-admin/api/applications/*', 'DELETE', '25', '', null, '4', '1', '2018-09-18 17:37:08', '2018-09-26 11:35:51', '1');
+INSERT INTO `sys_menu` VALUES ('251', '服务查询', null, null, '/taroco-admin/api/**', 'GET', '25', null, null, '1', '1', '2018-08-10 08:25:50', '2018-08-10 08:26:05', '0');
+INSERT INTO `sys_menu` VALUES ('252', '设置权重和标签', 'taroco_admin_set_weight', null, '/taroco-registry/eureka/apps/**', 'PUT', '25', null, null, '2', '1', '2018-08-10 08:54:10', '2018-08-10 08:54:47', '0');
+INSERT INTO `sys_menu` VALUES ('253', '服务日志级别设置', null, null, '/taroco-admin/api/applications/*/loggers/*', 'POST', '25', null, null, '1', '1', '2018-08-10 09:17:06', '2018-09-18 17:37:31', '0');
+INSERT INTO `sys_menu` VALUES ('254', '删除服务', null, null, '/taroco-admin/api/applications/*', 'DELETE', '25', '', null, '4', '1', '2018-09-18 17:37:08', '2018-09-18 17:37:57', '0');
 
 -- ----------------------------
 -- Table structure for sys_oauth_client_details
@@ -229,8 +228,8 @@ CREATE TABLE `sys_role` (
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '删除标识（0-正常,1-删除）',
   PRIMARY KEY (`role_id`),
-  UNIQUE KEY `role_idx1_role_code` (`role_code`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
+  UNIQUE KEY `role_idx1_role_code` (`role_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- ----------------------------
 -- Records of sys_role
@@ -247,13 +246,13 @@ CREATE TABLE `sys_role_dept` (
   `role_id` int(20) DEFAULT NULL COMMENT '角色ID',
   `dept_id` int(20) DEFAULT NULL COMMENT '部门ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色与部门对应关系';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='角色与部门对应关系';
 
 -- ----------------------------
 -- Records of sys_role_dept
 -- ----------------------------
 INSERT INTO `sys_role_dept` VALUES ('14', '14', '1');
-INSERT INTO `sys_role_dept` VALUES ('18', '1', '10');
+INSERT INTO `sys_role_dept` VALUES ('16', '1', '10');
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -263,7 +262,7 @@ CREATE TABLE `sys_role_menu` (
   `role_id` int(11) NOT NULL COMMENT '角色ID',
   `menu_id` int(11) NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`role_id`,`menu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色菜单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色菜单表';
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -282,7 +281,6 @@ INSERT INTO `sys_role_menu` VALUES ('1', '22');
 INSERT INTO `sys_role_menu` VALUES ('1', '23');
 INSERT INTO `sys_role_menu` VALUES ('1', '24');
 INSERT INTO `sys_role_menu` VALUES ('1', '25');
-INSERT INTO `sys_role_menu` VALUES ('1', '26');
 INSERT INTO `sys_role_menu` VALUES ('1', '28');
 INSERT INTO `sys_role_menu` VALUES ('1', '31');
 INSERT INTO `sys_role_menu` VALUES ('1', '32');
@@ -313,6 +311,10 @@ INSERT INTO `sys_role_menu` VALUES ('1', '111');
 INSERT INTO `sys_role_menu` VALUES ('1', '112');
 INSERT INTO `sys_role_menu` VALUES ('1', '113');
 INSERT INTO `sys_role_menu` VALUES ('1', '114');
+INSERT INTO `sys_role_menu` VALUES ('1', '251');
+INSERT INTO `sys_role_menu` VALUES ('1', '252');
+INSERT INTO `sys_role_menu` VALUES ('1', '253');
+INSERT INTO `sys_role_menu` VALUES ('1', '254');
 INSERT INTO `sys_role_menu` VALUES ('14', '1');
 INSERT INTO `sys_role_menu` VALUES ('14', '2');
 INSERT INTO `sys_role_menu` VALUES ('14', '3');
@@ -346,9 +348,9 @@ CREATE TABLE `sys_user` (
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   `del_flag` char(1) COLLATE utf8mb4_bin DEFAULT '0' COMMENT '0-正常，1-删除',
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `user_idx1_username` (`username`),
-  UNIQUE KEY `user_idx2_phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC COMMENT='用户表';
+  UNIQUE KEY `user_idx1_username` (`username`) USING BTREE,
+  UNIQUE KEY `user_idx2_phone` (`phone`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -363,7 +365,7 @@ CREATE TABLE `sys_user_role` (
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `role_id` int(11) NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`user_id`,`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户角色表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色表';
 
 -- ----------------------------
 -- Records of sys_user_role
