@@ -22,7 +22,7 @@ base:
     port: 6379
     password: taroco!@#$
   zipkin:
-    url: http://taroco-monitor:10002
+    url: http://172.27.0.11:10003/
 
 logging:
   file: logs/${spring.application.name}/${spring.application.name}.log
