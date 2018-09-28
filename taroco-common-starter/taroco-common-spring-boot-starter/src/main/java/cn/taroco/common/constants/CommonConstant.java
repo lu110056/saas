@@ -91,4 +91,9 @@ public interface CommonConstant {
     String SIMPLE_MONTH_FORMAT = "yyyyMM";
     String SIMPLE_DATE_FORMAT = "yyyyMMdd";
     String SIMPLE_DATETIME_FORMAT = "yyyyMMddHHmmss";
+
+    /**
+     * default LINE_SEPARATOR
+     */
+    String LINE_SEPARATOR = "/";
 }

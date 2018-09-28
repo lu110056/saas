@@ -1,5 +1,6 @@
 package cn.taroco.common.redis.template;
 
+import com.xiaoleilu.hutool.collection.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisClusterNode;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -239,13 +240,15 @@ public class TarocoRedisRepository {
         log.debug("[redisTemplate redis]  getValues()  patten={} ", keyPatten);
         return redisTemplate.execute((RedisCallback<Map<String, String>>) connection -> {
             RedisSerializer<String> serializer = getRedisSerializer();
-            Map<String, String> maps = new HashMap<>();
+            Map<String, String> maps = new HashMap<>(16);
             Set<String> keys = redisTemplate.keys(keyPatten + "*");
-            for (String key : keys) {
-                byte[] bKeys = serializer.serialize(key);
-                byte[] bValues = connection.get(bKeys);
-                String value = serializer.deserialize(bValues);
-                maps.put(key, value);
+            if (CollectionUtil.isNotEmpty(keys)) {
+                for (String key : keys) {
+                    byte[] bKeys = serializer.serialize(key);
+                    byte[] bValues = connection.get(bKeys);
+                    String value = serializer.deserialize(bValues);
+                    maps.put(key, value);
+                }
             }
             return maps;
         });

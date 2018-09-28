@@ -17,12 +17,21 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +39,7 @@ import java.util.stream.Collectors;
  * @date 2017/11/18 9:22
  */
 @Configuration
-@Import({
+@Import( {
         Swagger2Configuration.class
 })
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
@@ -52,51 +61,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
         // 没有分组
         if (swaggerProperties.getDocket().size() == 0) {
-            ApiInfo apiInfo = new ApiInfoBuilder()
-                    .title(swaggerProperties.getTitle())
-                    .description(swaggerProperties.getDescription())
-                    .version(swaggerProperties.getVersion())
-                    .license(swaggerProperties.getLicense())
-                    .licenseUrl(swaggerProperties.getLicenseUrl())
-                    .contact(new Contact(swaggerProperties.getContact().getName(),
-                            swaggerProperties.getContact().getUrl(),
-                            swaggerProperties.getContact().getEmail()))
-                    .termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
-                    .build();
-
-            // base-path处理
-            // 当没有配置任何path的时候，解析/**
-            if (swaggerProperties.getBasePath().isEmpty()) {
-                swaggerProperties.getBasePath().add("/**");
-            }
-            List<Predicate<String>> basePath = new ArrayList<>();
-            for (String path : swaggerProperties.getBasePath()) {
-                basePath.add(PathSelectors.ant(path));
-            }
-
-            // exclude-path处理
-            List<Predicate<String>> excludePath = new ArrayList<>();
-            for (String path : swaggerProperties.getExcludePath()) {
-                excludePath.add(PathSelectors.ant(path));
-            }
-
-            Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                    .host(swaggerProperties.getHost())
-                    .apiInfo(apiInfo)
-                    .globalOperationParameters(buildGlobalOperationParametersFromSwaggerProperties(
-                            swaggerProperties.getGlobalOperationParameters()))
-                    .select()
-                    .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
-                    .paths(
-                            Predicates.and(
-                                    Predicates.not(Predicates.or(excludePath)),
-                                    Predicates.or(basePath)
-                            )
-                    )
-                    .build()
-                    .securitySchemes(securitySchemes())
-                    .securityContexts(securityContexts());
-
+            final Docket docket = createDocket(swaggerProperties);
             configurableBeanFactory.registerSingleton("defaultDocket", docket);
             docketList.add(docket);
             return docketList;
@@ -160,6 +125,59 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
             docketList.add(docket);
         }
         return docketList;
+    }
+
+    /**
+     * 创建 Docket对象
+     *
+     * @param swaggerProperties swagger配置
+     * @return Docket
+     */
+    private Docket createDocket(final SwaggerProperties swaggerProperties) {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title(swaggerProperties.getTitle())
+                .description(swaggerProperties.getDescription())
+                .version(swaggerProperties.getVersion())
+                .license(swaggerProperties.getLicense())
+                .licenseUrl(swaggerProperties.getLicenseUrl())
+                .contact(new Contact(swaggerProperties.getContact().getName(),
+                        swaggerProperties.getContact().getUrl(),
+                        swaggerProperties.getContact().getEmail()))
+                .termsOfServiceUrl(swaggerProperties.getTermsOfServiceUrl())
+                .build();
+
+        // base-path处理
+        // 当没有配置任何path的时候，解析/**
+        if (swaggerProperties.getBasePath().isEmpty()) {
+            swaggerProperties.getBasePath().add("/**");
+        }
+        List<Predicate<String>> basePath = new ArrayList<>();
+        for (String path : swaggerProperties.getBasePath()) {
+            basePath.add(PathSelectors.ant(path));
+        }
+
+        // exclude-path处理
+        List<Predicate<String>> excludePath = new ArrayList<>();
+        for (String path : swaggerProperties.getExcludePath()) {
+            excludePath.add(PathSelectors.ant(path));
+        }
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                .host(swaggerProperties.getHost())
+                .apiInfo(apiInfo)
+                .globalOperationParameters(buildGlobalOperationParametersFromSwaggerProperties(
+                        swaggerProperties.getGlobalOperationParameters()))
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
+                .paths(
+                        Predicates.and(
+                                Predicates.not(Predicates.or(excludePath)),
+                                Predicates.or(basePath)
+                        )
+                )
+                .build()
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts());
     }
 
     @Override
