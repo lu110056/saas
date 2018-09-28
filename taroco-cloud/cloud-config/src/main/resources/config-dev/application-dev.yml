@@ -22,7 +22,7 @@ base:
     port: 6379
     password: hyman
   zipkin:
-    url: http://localhost:10002
+    url: http://111.231.192.110:10003/
 
 logging:
   file: logs/${spring.application.name}/${spring.application.name}.log
