@@ -26,6 +26,12 @@ import org.springframework.http.HttpHeaders;
  */
 public interface HttpHeadersProvider {
 
+    /**
+     * 读取实例所需Header
+     *
+     * @param instance 实例
+     * @return HttpHeaders
+     */
     HttpHeaders getHeaders(Instance instance);
 
 }

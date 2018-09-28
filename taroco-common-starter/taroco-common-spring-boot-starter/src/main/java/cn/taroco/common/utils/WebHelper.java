@@ -42,7 +42,7 @@ public final class WebHelper {
      * @return request中的请求及参数 request map
      */
     public static Map getRequestMap(HttpServletRequest request) {
-        Map<String, Object> dto = new HashMap<>();
+        Map<String, Object> dto = new HashMap<>(16);
         Enumeration<?> enumeration = request.getParameterNames();
         while (enumeration.hasMoreElements()) {
             String name = Objects.toString(enumeration.nextElement());

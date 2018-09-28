@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static cn.taroco.common.constants.CommonConstant.LINE_SEPARATOR;
+
 /**
  * 将缓存的所有applications的路由添加到zuul
  *
@@ -124,7 +126,7 @@ public class ApplicationRouteLocator implements RefreshableRouteLocator {
         if (this.routes.get() == null) {
             this.routes.set(locateRoutes());
         }
-        return new ArrayList<Route>(routes.get());
+        return new ArrayList<>(routes.get());
     }
 
     @Override
@@ -148,7 +150,7 @@ public class ApplicationRouteLocator implements RefreshableRouteLocator {
     private String stripServletPath(final String path) {
         String adjustedPath = path;
 
-        if (StringUtils.hasText(servletPath) && !"/".equals(servletPath)) {
+        if (StringUtils.hasText(servletPath) && !LINE_SEPARATOR.equals(servletPath)) {
             adjustedPath = path.substring(this.servletPath.length());
         }
 

@@ -81,7 +81,7 @@ public enum DefaultError implements IError {
 
     String errorCode;
     String errorMessage;
-    private static final String ns = "SYS";
+    private static final String NS = "SYS";
 
     DefaultError(String errorCode, String errorMessage) {
         this.errorCode = errorCode;
@@ -90,12 +90,12 @@ public enum DefaultError implements IError {
 
     @Override
     public String getNameSpace() {
-        return ns;
+        return NS;
     }
 
     @Override
     public String getErrorCode() {
-        return ns + "." + this.errorCode;
+        return NS + "." + this.errorCode;
     }
 
     @Override
