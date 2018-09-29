@@ -30,7 +30,7 @@ services:
   # The zipkin process services the UI, and also exposes a POST endpoint that
   # instrumentation can send trace data to. Scribe is disabled by default.
   taroco-zipkin:
-    image: openzipkin/zipkin:2.10.4
+    image: openzipkin/zipkin
     container_name: taroco-zipkin
     # Environment settings are defined here https://github.com/openzipkin/zipkin/tree/1.19.0/zipkin-server#environment-variables
     environment:
@@ -46,6 +46,8 @@ services:
       - MYSQL_USER=root
       # Defaults to empty
       - MYSQL_PASS=taroco@1234
+      # debugger
+      - JAVA_OPTS=-Dlogging.level.zipkin=DEBUG -Dlogging.level.zipkin2=DEBUG
     ports:
       # Port used for the Zipkin UI and HTTP Api
       - 10003:9411
