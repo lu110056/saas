@@ -41,6 +41,8 @@ management:
 spring:
   zipkin:
     base-url: ${base.zipkin.url}
+    sender:
+      type: web
   sleuth:
     sampler:
       percentage: 1.0
