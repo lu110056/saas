@@ -19,7 +19,7 @@ if [ ! -d ${JAR_DIR} ];then
    mkdir -p ${JAR_DIR}
 fi
 
-rm -rf ${JAR_DIR}/authentication-server*.jar
+rm -rf ${JAR_DIR}/taroco-authentication*.jar
 rm -rf ${JAR_DIR}/taroco-rbac*.jar
 rm -rf ${JAR_DIR}/cloud-admin*.jar
 rm -rf ${JAR_DIR}/cloud-monitor*.jar
