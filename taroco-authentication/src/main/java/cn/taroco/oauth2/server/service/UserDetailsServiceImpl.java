@@ -2,8 +2,8 @@ package cn.taroco.oauth2.server.service;
 
 import cn.taroco.common.constants.CommonConstant;
 import cn.taroco.common.vo.UserVO;
-import cn.taroco.oauth2.config.util.UserDetailsImpl;
 import cn.taroco.oauth2.server.feign.UserService;
+import cn.taroco.oauth2.server.userdetails.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;

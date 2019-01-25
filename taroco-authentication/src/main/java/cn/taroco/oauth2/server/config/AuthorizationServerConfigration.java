@@ -1,10 +1,16 @@
-package cn.taroco.oauth2.config;
+package cn.taroco.oauth2.server.config;
 
+import cn.taroco.common.config.TarocoOauth2Properties;
+import cn.taroco.common.constants.CommonConstant;
 import cn.taroco.common.constants.SecurityConstants;
+import cn.taroco.oauth2.server.userdetails.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -17,24 +23,31 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.sql.DataSource;
+import java.security.KeyPair;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 认证服务器配置
+ * 认证服务器配置抽象
  *
  * @author liuht
  * @date 2018/7/24 16:10
  */
+@Configuration
+@EnableConfigurationProperties({TarocoOauth2Properties.class})
 @EnableAuthorizationServer
-public class AbstractAuthServerConfig extends AuthorizationServerConfigurerAdapter {
-
-    @Autowired
-    private TokenStore tokenStore;
+public class AuthorizationServerConfigration extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TarocoOauth2Properties oauth2Properties;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -42,37 +55,46 @@ public class AbstractAuthServerConfig extends AuthorizationServerConfigurerAdapt
     @Autowired
     private DataSource dataSource;
 
-    @Autowired(required = false)
-    private TokenEnhancer tokenEnhancer;
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(jwtAccessTokenConverter());
+    }
 
-    @Autowired(required = false)
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
-
-    /**
-     * 令牌失效时间
-     */
-    private int accessTokenValiditySeconds;
-
-    /**
-     * 刷新令牌失效时间
-     */
-    private int refreshTokenValiditySeconds;
-
-    /**
-     * 是否可以重用刷新令牌
-     */
-    private boolean isReuseRefreshToken;
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        final JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        KeyPair keyPair = new KeyStoreKeyFactory
+                (oauth2Properties.getKeyStore().getLocation(), oauth2Properties.getKeyStore().getSecret().toCharArray())
+                .getKeyPair(oauth2Properties.getKeyStore().getAlias());
+        converter.setKeyPair(keyPair);
+        return converter;
+    }
 
     /**
-     * 是否支持刷新令牌
+     * jwt 生成token 定制化处理
+     *
+     * 添加一些额外的用户信息到token里面
+     *
+     * @return TokenEnhancer
      */
-    private boolean isSupportRefreshToken;
-
-    public AbstractAuthServerConfig(int accessTokenValiditySeconds, int refreshTokenValiditySeconds, boolean isReuseRefreshToken, boolean isSupportRefreshToken) {
-        this.accessTokenValiditySeconds = accessTokenValiditySeconds;
-        this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
-        this.isReuseRefreshToken = isReuseRefreshToken;
-        this.isSupportRefreshToken = isSupportRefreshToken;
+    @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return (accessToken, authentication) -> {
+            final Map<String, Object> additionalInfo = new HashMap<>(2);
+            additionalInfo.put("license", SecurityConstants.LICENSE);
+            final Object principal = authentication.getUserAuthentication().getPrincipal();
+            UserDetailsImpl user;
+            if (principal instanceof UserDetailsImpl) {
+                user = (UserDetailsImpl) principal;
+            } else {
+                final String username = (String) principal;
+                user = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
+            }
+            additionalInfo.put("userId", user.getUserId());
+            additionalInfo.put(CommonConstant.HEADER_LABEL, user.getLabel());
+            ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
+            return accessToken;
+        };
     }
 
     @Bean
@@ -85,7 +107,6 @@ public class AbstractAuthServerConfig extends AuthorizationServerConfigurerAdapt
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
         clients.withClientDetails(clientDetailsService());
     }
 
@@ -95,20 +116,14 @@ public class AbstractAuthServerConfig extends AuthorizationServerConfigurerAdapt
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setReuseRefreshToken(isReuseRefreshToken);
-        defaultTokenServices.setSupportRefreshToken(isSupportRefreshToken);
-        defaultTokenServices.setTokenStore(tokenStore);
-        defaultTokenServices.setAccessTokenValiditySeconds(accessTokenValiditySeconds);
-        defaultTokenServices.setRefreshTokenValiditySeconds(refreshTokenValiditySeconds);
+        defaultTokenServices.setSupportRefreshToken(true);
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setAccessTokenValiditySeconds(oauth2Properties.getAccessTokenValiditySeconds());
+        defaultTokenServices.setRefreshTokenValiditySeconds(oauth2Properties.getRefreshTokenValiditySeconds());
 
-        if (tokenEnhancer != null && jwtAccessTokenConverter != null) {
-            TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-            tokenEnhancerChain.setTokenEnhancers(
-                    Arrays.asList(jwtAccessTokenConverter, tokenEnhancer));
-            defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);
-        }
-
-        defaultTokenServices.setClientDetailsService(clientDetailsService());
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(jwtAccessTokenConverter(), tokenEnhancer()));
+        defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);
 
         endpoints
                 .authenticationManager(authenticationManager)

@@ -1,14 +1,19 @@
-package cn.taroco.oauth2.config;
+package cn.taroco.oauth2.server.config;
 
+import cn.taroco.common.config.TarocoOauth2Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 /**
  * webSecurity 权限控制类
@@ -17,7 +22,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @date 2018/7/24 15:58
  */
 @EnableWebSecurity
-public class AbstractSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfigration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private TarocoOauth2Properties oauth2Properties;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -25,6 +33,23 @@ public class AbstractSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry =
+                http
+                    .formLogin()
+                    .loginPage("/authentication/require")
+                    .loginProcessingUrl("/authentication/form")
+                    .successForwardUrl("/authentication/loginSuccess")
+                    .failureUrl("/authentication/require?error=true")
+                    .and()
+                    .authorizeRequests();
+
+        final List<String> urlPermitAll = oauth2Properties.getUrlPermitAll();
+        urlPermitAll.forEach(url -> registry.antMatchers(url).permitAll());
+        registry.anyRequest().authenticated().and().csrf().disable();
     }
 
     /**
