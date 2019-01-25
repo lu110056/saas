@@ -1,9 +1,9 @@
-package cn.taroco.oauth2.config.util;
+package cn.taroco.oauth2.server.userdetails;
 
 import cn.taroco.common.constants.CommonConstant;
+import cn.taroco.common.constants.SecurityConstants;
 import cn.taroco.common.vo.SysRole;
 import cn.taroco.common.vo.UserVO;
-import cn.taroco.common.constants.SecurityConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
