@@ -1,10 +1,9 @@
 # Taroco 
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1237f7a17da0481bad1ad1fe0f93b7ea)](https://app.codacy.com/app/liuht777/Taroco?utm_source=github.com&utm_medium=referral&utm_content=liuht777/Taroco&utm_campaign=Badge_Grade_Dashboard)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/liuht777/Taroco)
 [![Total lines](https://tokei.rs/b1/github/liuht777/Taroco?category=lines)](https://github.com/liuht777/Taroco)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?label=license)](https://github.com/liuht777/Taroco/blob/master/LICENSE)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8e39a24e1be740c58b83fb81763ba317)](https://app.codacy.com/project/liuht777/Taroco/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=liuht777/Taroco&amp;utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1237f7a17da0481bad1ad1fe0f93b7ea)](https://app.codacy.com/app/liuht777/Taroco?utm_source=github.com&utm_medium=referral&utm_content=liuht777/Taroco&utm_campaign=Badge_Grade_Dashboard)
 
 - [配套前端地址](https://github.com/liuht777/Taroco-UI-NEW)
 - [在线文档](http://118.190.154.85:8080)
